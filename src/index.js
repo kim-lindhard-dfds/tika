@@ -26,7 +26,7 @@ function executeCli(args) {
     });
 }
 
-app.get("/topics", (req, res) => {
+app.get("/api/topics", (req, res) => {
     executeCli(["topic", "list"])
         .then(list => {
             res.send({
@@ -41,7 +41,7 @@ app.get("/topics", (req, res) => {
         });
 });
 
-app.post("/topics", (req, res) => {
+app.post("/api/topics", (req, res) => {
     const { name } = req.body;
     executeCli(["topic", "create", name])
         .then(() => {
@@ -55,5 +55,5 @@ app.post("/topics", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`API is listening on port ${port}...`);
+    console.log(`tika is listening on port ${port}...`);
 });
