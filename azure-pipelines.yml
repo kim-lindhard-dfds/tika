@@ -1,0 +1,21 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+  - task: DownloadSecureFile@1
+    displayName: 'Download ccloud config'
+    inputs:
+      secureFile: '852b1ca1-ce50-4845-897f-b9f9c1738b1f'
+  - bash: |
+      echo ${DOWNLOADSECUREFILE_SECUREFILEPATH}
+      cp ${DOWNLOADSECUREFILE_SECUREFILEPATH} ./ccloud-config
+      make build
+    displayName: 'Build a deployment artifact'
