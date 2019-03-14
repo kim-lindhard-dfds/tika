@@ -10,12 +10,24 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
+  - task: InstallSSHKey@0
+    inputs:
+      hostName: github.com,192.30.253.113 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+      sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCSRatCN0LXkS1sWlzphG6FhtZIwvIlx4w4s6U+Z3TZCSnFCDN0tpD20WQ4qkRT8Q/9FvIyXzn6EQihN+hNtDUdnKecEYADCNuo2r2EzZUjYc4nYOQMUcaSCilu4oWiicR+GuEdUTxzWLqW7K6vRcwUKFsq4zpwva/Gr7SZHzT4IichI25UIOTtmWsnQvfPCSGTtwFocmB06WYNgCBsQxB3Y0RF2Q6BzGiKblOwnLhrp8gEJBm9wLdQiYGcumQPuG5ZxtT/d2EfBuj1+cGQmmhb/QVDY1xi5H7hC83IKGFytZDVGibwcQQUIV2proALE3S/DNSEQoi+cRjmvQkNkVv jandr@DKCPH-LR90PUUNN
+      sshKeySecureFile: tika_rsa
+
   - task: DownloadSecureFile@1
     displayName: 'Download ccloud config'
     inputs:
       secureFile: '852b1ca1-ce50-4845-897f-b9f9c1738b1f'
+
   - bash: |
-      echo ${DOWNLOADSECUREFILE_SECUREFILEPATH}
+      set -eu -o pipefail
+
+      sudo pip install setuptools
+      sudo pip install awscli
+      export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+
       cp ${DOWNLOADSECUREFILE_SECUREFILEPATH} ./ccloud-config
-      make build
+      make release BUILD_NUMBER=$(Build.BuildId)
     displayName: 'Build a deployment artifact'
