@@ -4,7 +4,7 @@ const path = require("path");
 const main = env => {
   return {
     entry: {
-      main: "./src/wrapper/index.ts"
+      main: "./src/index.ts"
     },
     target: "node",
     devtool: "source-map",
