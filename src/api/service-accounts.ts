@@ -37,5 +37,11 @@ export class ServiceAccountsInterface {
 
             res.json(userTestStatus);
         });
+
+        app.delete('/service-accounts/:id', function (req: Request, res: Response) {
+            console.log('delete /service-accounts/' + req.params.id);
+
+            res.sendStatus(200);
+        });
     }
 }
