@@ -1,0 +1,16 @@
+###
+
+# List all service accounts
+
+GET http://localhost:3000/service-accounts
+
+###
+
+# Add Context to capability
+POST http://localhost:3000/service-accounts
+content-type: application/json
+
+{
+    "name": "me",
+    "description": "None"
+}
