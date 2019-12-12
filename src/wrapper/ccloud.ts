@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
 import * as readline from "readline";
 import { parse } from "./parser";
+import ServiceAccount from "./model/service-account";
 
 export default class Ccloud {
   binPath: string;
@@ -8,22 +9,24 @@ export default class Ccloud {
   ServiceAccount: CcloudServiceAccount;
   Acl: CcloudAcl;
   Topic: CcloudTopic;
+  Cluster: CcloudCluster;
 
   constructor() {
     this.ServiceAccount = new CcloudServiceAccount(this);
+    this.Cluster = new CcloudCluster(this);
   }
 }
 
 class CcloudServiceAccount {
   ccloud: Ccloud;
 
-  async list(): Promise<string[]> {
+  async list(): Promise<ServiceAccount[]> {
     let result = await executeCli(["service-account", "list"]);
     parse(result);
     console.log("\n::SEP::\n");
     console.log(result);
 
-    return result;
+    return (result as any) as ServiceAccount[];
   }
 
   constructor(ccloud: Ccloud) {
@@ -48,6 +51,23 @@ class CcloudTopic {
 
   list(): string[] {
     return [];
+  }
+
+  constructor(ccloud: Ccloud) {
+    this.ccloud = ccloud;
+  }
+}
+
+class CcloudCluster {
+  ccloud: Ccloud;
+
+  async list(): Promise<any[]> {
+    let result = await executeCli(["kafka", "cluster", "list"]);
+    parse(result);
+    console.log("\n::SEP::\n");
+    console.log(result);
+
+    return result;
   }
 
   constructor(ccloud: Ccloud) {
