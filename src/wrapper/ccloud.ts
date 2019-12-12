@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import * as readline from "readline";
+import { parse } from "./parser";
 
 export default class Ccloud {
   binPath: string;
@@ -18,6 +19,8 @@ class CcloudServiceAccount {
 
   async list(): Promise<string[]> {
     let result = await executeCli(["service-account", "list"]);
+    parse(result);
+    console.log("\n::SEP::\n");
     console.log(result);
 
     return result;
@@ -35,7 +38,7 @@ class CcloudAcl {
     return [];
   }
 
-  constructor(ccloud : Ccloud) {
+  constructor(ccloud: Ccloud) {
     this.ccloud = ccloud;
   }
 }
@@ -47,13 +50,14 @@ class CcloudTopic {
     return [];
   }
 
-  constructor(ccloud : Ccloud) {
+  constructor(ccloud: Ccloud) {
     this.ccloud = ccloud;
   }
 }
 
 function executeCli(args: string[]): Promise<string[]> {
   const cli = process.env.CCLOUDCLI;
+
   return new Promise((resolve, reject) => {
     const lines = new Array();
     const runner = spawn(cli, args);
@@ -65,7 +69,7 @@ function executeCli(args: string[]): Promise<string[]> {
       if (exitCode.toString() != "0") {
         reject(exitCode.toString());
       } else {
-        resolve(lines.slice(1));
+        resolve(lines);
       }
     });
   });
