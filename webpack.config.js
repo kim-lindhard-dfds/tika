@@ -4,13 +4,19 @@ const path = require("path");
 const main = env => {
   return {
     entry: {
-      main: "./src/index.ts"
+      main: ["./node_modules/regenerator-runtime/runtime.js", "./src/index.ts"],
+      playground: [
+        "./node_modules/regenerator-runtime/runtime.js",
+        "./src/wrapper/index.ts"
+      ]
     },
     target: "node",
     devtool: "source-map",
     output: {
       path: path.resolve(__dirname, "dist"),
-      filename: "[name].js"
+      filename: "[name].js",
+      hotUpdateChunkFilename: "hot/hot-update.js",
+      hotUpdateMainFilename: "hot/hot-update.json"
     },
     resolve: {
       extensions: [".js", ".ts", ".tsx"]
