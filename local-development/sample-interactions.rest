@@ -15,9 +15,31 @@ content-type: application/json
     "description": "None"
 }
 
-
 ###
 
 # Remove service account
 DELETE  http://localhost:3000/service-accounts/123
+content-type: application/json
+
+###
+
+# List all API keys
+
+GET http://localhost:3000/api-keys
+
+###
+
+# Add API Key
+POST http://localhost:3000/api-keys
+content-type: application/json
+
+{
+    "serviceAccountId": "me",
+    "description": "A long and awesome discription"
+}
+
+###
+
+# Remove service account
+DELETE  http://localhost:3000/api-keys/123
 content-type: application/json

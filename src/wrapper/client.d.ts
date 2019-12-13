@@ -4,6 +4,16 @@ type ServiceAccount = {
     description: string;
 }
 
+type ApiKeySet = {
+    key: string;
+    secret: string;
+}
+
+type ApiKey = {
+    key: string;
+    description: string;
+}
+
 interface ServiceAccounts {
     createServiceAccount(  
         name: string,
@@ -18,6 +28,21 @@ interface ServiceAccounts {
     : ServiceAccount[]
 }
 
+interface ApiKeys {
+    createApiKey(
+        serviceAccountId: number,
+        description: string
+    ): ApiKeySet;
+
+    deleteApiKey(
+        key: string
+    ): void;
+
+    getApiKeys()
+    : ApiKey[]
+}
+
 interface CCloudCliWrapper{
     ServiceAccounts : ServiceAccounts;
+    ApiKeys : ApiKeys;
 }
