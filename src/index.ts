@@ -2,6 +2,7 @@ import {ServiceAccountsInterface} from "./api/service-accounts";
 import {ApiKeysInterface} from "./api/api-keys";
 
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
+import {Ccloud} from "./wrapper/ccloud";
 const express = require("express");
 
 const app = express();
@@ -10,10 +11,11 @@ app.use(express.json());
 
 
 var cCloudCliWrapper= new NotConnectedCCloudCliWrapper();
+let cc = new Ccloud();
 
 const serviceAccountsInterface= new ServiceAccountsInterface();
 serviceAccountsInterface.configureApp(
-    cCloudCliWrapper.ServiceAccounts, 
+    cc.ServiceAccounts, 
     app
 );
 
