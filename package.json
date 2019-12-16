@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "rm -rf dist && webpack --watch --hot --mode development",
     "build": "webpack --mode production",
-    "start": "node ./dist/main.js",
-    "dev": "nodemon ./dist/main.js"
+    "dev": "nodemon ./dist/main.js",
+    "start": "node dist/main.js",
+    "clean": "rm -rf dist"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "babel-loader": "^8.0.6",
     "express": "^4.17.1",
     "prettier": "^1.19.1",
+    "regenerator-runtime": "^0.13.3",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",

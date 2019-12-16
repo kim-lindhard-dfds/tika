@@ -1,31 +1,31 @@
 type ServiceAccount = {
-    id: number;
-    name: string;
-    description: string;
+    Id: number;
+    Name: string;
+    Description: string;
 }
 
 type ApiKeySet = {
-    key: string;
-    secret: string;
+    Key: string;
+    Secret: string;
 }
 
 type ApiKey = {
-    key: string;
-    description: string;
+    Key: string;
+    Description: string;
 }
 
 interface ServiceAccounts {
     createServiceAccount(  
         name: string,
         description: string
-    ): ServiceAccount;
+    ): Promise<ServiceAccount>;
 
     deleteServiceAccount(
         id: number
-    ): void
+    ): Promise<boolean>
 
     getServiceAccounts()
-    : ServiceAccount[]
+    : Promise<ServiceAccount[]>
 }
 
 interface ApiKeys {

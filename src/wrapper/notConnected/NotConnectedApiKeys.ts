@@ -19,23 +19,23 @@ export class NotConnectedApiKeys implements ApiKeys {
         let key = NotConnectedApiKeys.createRandomString(16, true);
 
         let apiKey: ApiKey = {
-            key: key,
-            description: description
+            Key: key,
+            Description: description
         };
         this.apiKeys.push(apiKey);
 
 
         let apiKeySet: ApiKeySet =
         {
-            key: key,
-            secret: NotConnectedApiKeys.createRandomString(64, false)
+            Key: key,
+            Secret: NotConnectedApiKeys.createRandomString(64, false)
         };
 
         return apiKeySet;
     }
 
     deleteApiKey(key: string): void {
-        this.apiKeys = this.apiKeys.filter(a => a.key !== key);
+        this.apiKeys = this.apiKeys.filter(a => a.Key !== key);
     }
     
     getApiKeys(): ApiKey[] {

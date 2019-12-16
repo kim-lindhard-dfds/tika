@@ -4,26 +4,26 @@ export class ServiceAccountsInterface {
 
     public configureApp(serviceAccounts: ServiceAccounts, app: Application) {
 
-        app.post('/service-accounts', function (req: Request, res: Response) {
+        app.post('/service-accounts', async function (req: Request, res: Response) {
             console.log('post /service-accounts');
 
-            let newServiceAccount = serviceAccounts.createServiceAccount(
+            let newServiceAccount = await serviceAccounts.createServiceAccount(
                 req.body.name,
                 req.body.description
             );
             res.json(newServiceAccount);
         });
 
-        app.get('/service-accounts', function (req: Request, res: Response) {
+        app.get('/service-accounts', async function (req: Request, res: Response) {
             console.log('get /service-accounts');
 
-            res.json(serviceAccounts.getServiceAccounts());
+            res.json(await serviceAccounts.getServiceAccounts());
         });
 
-        app.delete('/service-accounts/:id', function (req: Request, res: Response) {
+        app.delete('/service-accounts/:id', async function (req: Request, res: Response) {
             console.log('delete /service-accounts/' + req.params.id);
 
-            serviceAccounts.deleteServiceAccount(parseInt(req.params.id));
+            await serviceAccounts.deleteServiceAccount(parseInt(req.params.id));
 
             res.sendStatus(200);
         });
