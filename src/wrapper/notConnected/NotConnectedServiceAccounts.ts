@@ -16,14 +16,14 @@ export class NotConnectedServiceAccounts implements ServiceAccounts {
         this.serviceAccounts = [];
     }
 
-    createServiceAccount(name: string, description: string): ServiceAccount {
+    async createServiceAccount(name: string, description: string): Promise<ServiceAccount> {
         let id = Math.floor(100000 + Math.random() * 900000);
 
         let serviceAccount: ServiceAccount =
         {
-            id: id,
-            name: name,
-            description: description
+            Id: id,
+            Name: name,
+            Description: description
         };
 
         this.serviceAccounts.push(serviceAccount);
@@ -31,11 +31,12 @@ export class NotConnectedServiceAccounts implements ServiceAccounts {
         return serviceAccount;
     } 
     
-    deleteServiceAccount(id: number): void {
-        this.serviceAccounts = this.serviceAccounts.filter(s => s.id !== id);
+    async deleteServiceAccount(id: number): Promise<boolean> {
+        this.serviceAccounts = this.serviceAccounts.filter(s => s.Id !== id);
+        return true;
     }
     
-    getServiceAccounts(): ServiceAccount[] {
+    async getServiceAccounts(): Promise<ServiceAccount[]> {
         return this.serviceAccounts;
     }
 }
