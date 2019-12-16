@@ -8,12 +8,23 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+var cc: CCloudCliWrapper;
 
+const apiImplementationToUse = process.env.TIKA_API_IMPLEMENTATION || "connected";
 
-var cCloudCliWrapper= new NotConnectedCCloudCliWrapper();
-let cc = new Ccloud();
+console.log("Using api implementation:", apiImplementationToUse);
+switch (apiImplementationToUse.valueOf()) {
+    case "notconnected".valueOf():
+        cc = new NotConnectedCCloudCliWrapper();
+        break;
+    case "connected".valueOf():
+        cc = new Ccloud();
+        break;
+    default:
+        cc = new Ccloud();
+}
 
-const serviceAccountsInterface= new ServiceAccountsInterface();
+const serviceAccountsInterface = new ServiceAccountsInterface();
 serviceAccountsInterface.configureApp(
     cc.ServiceAccounts, 
     app
@@ -22,7 +33,7 @@ serviceAccountsInterface.configureApp(
 const apiKeysInterface = new ApiKeysInterface();
 
 apiKeysInterface.configureApp(
-    cCloudCliWrapper.ApiKeys,
+    cc.ApiKeys,
     app
 );
 

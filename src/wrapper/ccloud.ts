@@ -25,7 +25,6 @@ class CcloudServiceAccount implements ServiceAccounts {
   async getServiceAccounts(): Promise<ServiceAccount[]> {
     let result = await executeCli(["service-account", "list"]);
     result = parse(result);
-    console.log(result);
 
     return (result as any) as ServiceAccount[];
   }
@@ -33,7 +32,6 @@ class CcloudServiceAccount implements ServiceAccounts {
   async createServiceAccount(accountName: string, description: string = ""): Promise<ServiceAccount> {
     let result = await executeCli(["service-account", "create", accountName, "--description", description]);
     result = parseSideColumns(result);
-    console.log(result);
 
     return (result as any) as ServiceAccount;
   }
@@ -111,7 +109,7 @@ class CcloudCluster {
 }
 
 function executeCli(args: string[]): Promise<string[]> {
-  const cli = process.env.CCLOUDCLI;
+  const cli = process.env.TIKA_CCLOUD_BIN_PATH;
 
   return new Promise((resolve, reject) => {
     const lines = new Array();
