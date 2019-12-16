@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 import * as readline from "readline";
 import { parse, parseSideColumns } from "./parser";
 import { CcloudSessionExpiredException } from "./model/error";
+import * as fs from "fs";
 
 export default class Ccloud implements CCloudCliWrapper {
   binPath: string;
@@ -16,6 +17,13 @@ export default class Ccloud implements CCloudCliWrapper {
     this.ServiceAccounts = new CcloudServiceAccount(this);
     this.ApiKeys = new CcloudApiKeys(this);
     this.Cluster = new CcloudCluster(this);
+  }
+
+  login() {
+    const cli = process.env.TIKA_CCLOUD_BIN_PATH;
+    let ccUser = process.env.TIKA_CC_USER;
+    let ccPass = process.env.TIKA_CC_PASS;
+    
   }
 }
 
@@ -138,6 +146,8 @@ function cliErrHandler(exitCode: number, lines: string[]): boolean {
   if (
     b64_line.valueOf() ===
     "RXJyb3I6IFlvdXIgc2Vzc2lvbiBoYXMgZXhwaXJlZC4gUGxlYXNlIGxvZ2luIGFnYWluLg==".valueOf()
+    || b64_line.valueOf() ===
+    "RXJyb3I6IFlvdSBtdXN0IGxvZ2luIHRvIHJ1biB0aGF0IGNvbW1hbmQu".valueOf()
   ) {
     throw new CcloudSessionExpiredException();
   }

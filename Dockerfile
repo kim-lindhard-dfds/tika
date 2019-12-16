@@ -15,27 +15,26 @@ RUN npm run build
 FROM openjdk:jre-slim AS Runner
 
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install curl
+RUN apt-get -y install curl expect
 
 WORKDIR /ccloud
 
 # download ccloud cli tool
-RUN curl -o /tmp/tools.tar.gz https://s3-us-west-2.amazonaws.com/confluent.cloud/cli/ccloud-0.2.1.tar.gz
-RUN tar -xv -f /tmp/tools.tar.gz -C /ccloud
+RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /ccloud/bin
 
-ENV CCLOUDCLI="/ccloud/ccloud-0.2.1/bin/ccloud"
+ENV TIKA_CCLOUD_BIN_PATH="/ccloud/bin/ccloud"
+ENV PATH "$PATH:/ccloud/bin"
 
 # install nodejs
 RUN apt-get install -y gnupg
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
 RUN apt-get install -y nodejs
 
-# WORKDIR /ccloud/ccloud-0.2.1/bin
 
-WORKDIR /app 
+WORKDIR /app
 
 COPY --from=Builder /app/dist/main.js .
 
 COPY ./ccloud-config /root/.ccloud/config
 
-ENTRYPOINT [ "node", "main" ]
+ENTRYPOINT [ "node", "main.js" ]
