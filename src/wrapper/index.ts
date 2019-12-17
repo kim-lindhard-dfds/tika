@@ -1,6 +1,6 @@
 import { Ccloud } from "./ccloud";
 
-import {parseSideColumns} from "./parser";
+import {parseSideColumns, parse} from "./parser";
 
 let cc = new Ccloud();
 
@@ -11,6 +11,7 @@ let cc = new Ccloud();
     //await cc.ServiceAccounts.getServiceAccounts();
     //await cc.ServiceAccounts.deleteServiceAccount(sa.Id);
     //cc.login();
+
     let data : string[] = [];
     data.push("+-------------+--------------------------------+");
     data.push("| Id          |                          31977 |")
@@ -19,6 +20,7 @@ let cc = new Ccloud();
     data.push("|             | adawryy 8asr 7dsf87ahyd 7a8sdy |")
     data.push("|             | 78aw7e3n                       |")
     data.push("+-------------+--------------------------------+")
+
     let resp = parseSideColumns(data);
     console.log(resp);
   } catch (e) {

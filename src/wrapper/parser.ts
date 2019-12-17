@@ -6,14 +6,36 @@ function parse(input: ParseInput): any[] {
     let payload: any[] = [];
 
     for (var i = 2; i < input.length; i++) {
-      let rawEntry: string[] = input[i].replace(/\s/g, "").split("|");
+      // let rawEntry: string[] = input[i].replace(/\s/g, "").split("|");
+      let rawEntry: string[] = input[i].split("|");
+      
+
       let entry: any = {};
       columns.forEach((column, index) => {
-        entry[column] = rawEntry[index];
+        let val = "";
+        if (column.valueOf() !== "Description") {
+          val = rawEntry[index].replace(/\s/g, "");
+        } else {
+          val = rawEntry[index].trimLeft();
+
+          let spaceCounter : number = 0;
+          for (let j = val.length-1; j > 0; j--) {
+            let currentCharCode = val.charCodeAt(j);
+            if (currentCharCode === 32) {
+              spaceCounter++;
+            } else {
+              break;
+            }
+          }
+          val = val.slice(0, val.length - spaceCounter);
+        }
+
+        entry[column] = val;
       });
 
       if ((entry.Id as string).length === 0) {
         let previousEntry: any = payload.slice(-1)[0];
+
         previousEntry.Description =
           previousEntry.Description + " " + entry.Description;
       } else {
