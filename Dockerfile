@@ -15,7 +15,7 @@ RUN npm run build
 FROM openjdk:jre-slim AS Runner
 
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install curl expect
+RUN apt-get -y install curl expect cron
 
 WORKDIR /ccloud
 
@@ -36,5 +36,7 @@ WORKDIR /app
 COPY --from=Builder /app/dist/main.js .
 
 COPY ./ccloud-config /root/.ccloud/config
+COPY ./login.sh /app/login.sh
+COPY ./entrypoint.sh /app/entrypoint.sh
 
-ENTRYPOINT [ "node", "main.js" ]
+ENTRYPOINT /app/entrypoint.sh
