@@ -42,15 +42,41 @@ function parseSideColumns(input: ParseInput): any[] {
 
       if (columnName.valueOf() === "".valueOf()) {
         let previousEntry: any = payload["Description"];
+        columnValue = columnValue.trimLeft();
+
+        let spaceCounter : number = 0;
+        for (let j = columnValue.length-1; j > 0; j--) {
+          let currentCharCode = columnValue.charCodeAt(j);
+          if (currentCharCode === 32) {
+            spaceCounter++;
+          } else {
+            break;
+          }
+        }
+        columnValue = columnValue.slice(0, columnValue.length - spaceCounter);
+
         payload["Description"] = previousEntry + columnValue;
         continue;
       }
 
       if (rawEntry[1].replace(/\s/g, "").valueOf() !== "Description") {
         columnValue = columnValue.replace(/\s/g, "");
+      } else {
+        columnValue = columnValue.trimLeft();
+
+        let spaceCounter : number = 0;
+        for (let j = columnValue.length-1; j > 0; j--) {
+          let currentCharCode = columnValue.charCodeAt(j);
+          if (currentCharCode === 32) {
+            spaceCounter++;
+          } else {
+            break;
+          }
+        }
+        columnValue = columnValue.slice(0, columnValue.length - spaceCounter);
       }
 
-      console.log(i, rawEntry);
+      //console.log(i, rawEntry);
       payload[columnName] = columnValue;
     }
 
