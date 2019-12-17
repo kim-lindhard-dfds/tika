@@ -36,8 +36,22 @@ function parseSideColumns(input: ParseInput): any[] {
         continue;
       }
 
-      let rawEntry: string[] = input[i].replace(/\s/g, "").split("|");
-      payload[rawEntry[1]] = rawEntry[2];
+      let rawEntry: string[] = input[i].split("|");
+      let columnName : string = rawEntry[1].replace(/\s/g, "");
+      let columnValue : string = rawEntry[2];
+
+      if (columnName.valueOf() === "".valueOf()) {
+        let previousEntry: any = payload["Description"];
+        payload["Description"] = previousEntry + columnValue;
+        continue;
+      }
+
+      if (rawEntry[1].replace(/\s/g, "").valueOf() !== "Description") {
+        columnValue = columnValue.replace(/\s/g, "");
+      }
+
+      console.log(i, rawEntry);
+      payload[columnName] = columnValue;
     }
 
     return payload;
