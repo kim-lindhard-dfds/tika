@@ -21,6 +21,25 @@ test("basic",async () => {
     );
   });
 
+  test("parse api-key create",async () => {
+    let data : string[] = [];
+    data.push("Save the API key and secret. The secret is not retrievable later.");
+    data.push("+---------+------------------------------------------------------------------+");
+    data.push("| API Key | QAAAQRZE324JUWUT                                                 |");
+    data.push("| Secret  | xlUWLYolo2oyFITLTLene/H5nnotakeyWPw8TZgaW4y/PRngeXndmE/He1J0uce6 |");
+    data.push("+---------+------------------------------------------------------------------+");
+    
+
+    let resp = parseSideColumns(data);
+    expect(resp).toStrictEqual(
+      {
+        "APIKey": "QAAAQRZE324JUWUT", 
+        "Secret": "xlUWLYolo2oyFITLTLene/H5nnotakeyWPw8TZgaW4y/PRngeXndmE/He1J0uce6"
+      }
+    );
+  });
+
+
 test("parse api-key list",async () => {
   let data : string[] = [];
   data.push("         Key         | Owner |          Description           | Resource Type | Resource ID  ");

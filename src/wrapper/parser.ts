@@ -79,7 +79,7 @@ function parseSideColumns(input: ParseInput): any[] {
     let payload: any = {};
 
     for (var i = 0; i < input.length; i++) {
-      if (input[i].includes("+-")) {
+      if (input[i][0] !== "|") {
         continue;
       }
 
