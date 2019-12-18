@@ -5,10 +5,6 @@ const main = env => {
   return {
     entry: {
       main: ["./node_modules/regenerator-runtime/runtime.js", "./src/index.ts"],
-      playground: [
-        "./node_modules/regenerator-runtime/runtime.js",
-        "./src/wrapper/index.ts"
-      ]
     },
     target: "node",
     devtool: "source-map",
