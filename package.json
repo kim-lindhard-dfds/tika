@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "watch": "rm -rf dist && webpack --watch --hot --mode development",
     "build": "webpack --mode production",
     "dev": "nodemon ./dist/main.js",
@@ -38,8 +38,11 @@
     "@typescript-eslint/parser": "^2.11.0"
   },
   "devDependencies": {
-    "eslint-plugin-prettier": "^3.1.1",
+    "@types/jest": "^24.0.23",
     "eslint": "^6.7.2",
-    "nodemon": "^2.0.2"
+    "eslint-plugin-prettier": "^3.1.1",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "ts-jest": "^24.2.0"
   }
 }

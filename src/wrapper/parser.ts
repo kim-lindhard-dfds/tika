@@ -1,4 +1,17 @@
 type ParseInput = string[];
+function countSpacesFromBack(input: string) : number {
+  let spaceCount : number = 0;
+  for (let currentPosition = input.length-1; currentPosition > 0; currentPosition--) {
+    let currentCharCode = input.charCodeAt(currentPosition);
+    if (currentCharCode === 32) {
+      spaceCount++;
+    } else {
+      break;
+    }
+  }
+
+  return spaceCount;
+}
 
 function parse(input: ParseInput): any[] {
   if (input.length > 0) {
@@ -17,17 +30,8 @@ function parse(input: ParseInput): any[] {
           val = rawEntry[index].replace(/\s/g, "");
         } else {
           val = rawEntry[index].trimLeft();
-
-          let spaceCounter : number = 0;
-          for (let j = val.length-1; j > 0; j--) {
-            let currentCharCode = val.charCodeAt(j);
-            if (currentCharCode === 32) {
-              spaceCounter++;
-            } else {
-              break;
-            }
-          }
-          val = val.slice(0, val.length - spaceCounter);
+          let spaceCounted = countSpacesFromBack(val);
+          val = val.slice(0, val.length - spaceCounted);
         }
 
         entry[column] = val;
@@ -66,16 +70,8 @@ function parseSideColumns(input: ParseInput): any[] {
         let previousEntry: any = payload["Description"];
         columnValue = columnValue.trimLeft();
 
-        let spaceCounter : number = 0;
-        for (let j = columnValue.length-1; j > 0; j--) {
-          let currentCharCode = columnValue.charCodeAt(j);
-          if (currentCharCode === 32) {
-            spaceCounter++;
-          } else {
-            break;
-          }
-        }
-        columnValue = columnValue.slice(0, columnValue.length - spaceCounter);
+        let spacesCounted = countSpacesFromBack(columnValue);
+        columnValue = columnValue.slice(0, columnValue.length - spacesCounted);
 
         payload["Description"] = previousEntry + columnValue;
         continue;
@@ -86,16 +82,8 @@ function parseSideColumns(input: ParseInput): any[] {
       } else {
         columnValue = columnValue.trimLeft();
 
-        let spaceCounter : number = 0;
-        for (let j = columnValue.length-1; j > 0; j--) {
-          let currentCharCode = columnValue.charCodeAt(j);
-          if (currentCharCode === 32) {
-            spaceCounter++;
-          } else {
-            break;
-          }
-        }
-        columnValue = columnValue.slice(0, columnValue.length - spaceCounter);
+        let spaceCounted = countSpacesFromBack(columnValue);
+        columnValue = columnValue.slice(0, columnValue.length - spaceCounted);
       }
 
       //console.log(i, rawEntry);
