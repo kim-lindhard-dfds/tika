@@ -14,6 +14,15 @@ type ApiKey = {
     Description: string;
 }
 
+type AccessControlList = {
+    ServiceAccountId: string;
+    Permission: string;
+    Operation: string;
+    Resource: string;
+    Name: string;
+    Type: string;
+}
+
 interface ServiceAccounts {
     createServiceAccount(  
         name: string,
@@ -42,7 +51,17 @@ interface ApiKeys {
     : Promise<ApiKey[]>
 }
 
+interface AccessControlLists {
+    getAccessControlLists()
+    : Promise<AccessControlList[]>
+}
+
+interface Kafka{
+    AccessControlLists : AccessControlLists;
+}
+
 interface CCloudCliWrapper{
     ServiceAccounts : ServiceAccounts;
     ApiKeys : ApiKeys;
+    Kafka : Kafka;
 }

@@ -12,11 +12,13 @@ export default class Ccloud implements CCloudCliWrapper {
   Acl: CcloudAcl;
   Topic: CcloudTopic;
   Cluster: CcloudCluster;
+  Kafka: Kafka;
 
   constructor() {
     this.ServiceAccounts = new CcloudServiceAccount(this);
     this.ApiKeys = new CcloudApiKeys(this);
     this.Cluster = new CcloudCluster(this);
+    this.Kafka = new KafKa();
   }
 
   login() {
@@ -24,6 +26,19 @@ export default class Ccloud implements CCloudCliWrapper {
     let ccUser = process.env.TIKA_CC_USER;
     let ccPass = process.env.TIKA_CC_PASS;
 
+  }
+}
+
+class CcloudAccessControlLists implements AccessControlLists {
+  getAccessControlLists(): Promise<AccessControlList[]> {
+    throw new Error("Method not implemented.");
+  }
+}
+
+class KafKa implements Kafka {
+  AccessControlLists: AccessControlLists;
+  constructor() {
+    this.AccessControlLists = new CcloudAccessControlLists();
   }
 }
 
@@ -66,7 +81,7 @@ class CcloudApiKeys implements ApiKeys {
       "api-key",
       "create",
       "--resource", process.env.TIKA_CCLOUD_CLUSTER_ID,
-      "--service-account-id", serviceAccountId +"",
+      "--service-account-id", serviceAccountId + "",
       "--description", description]
     );
 
