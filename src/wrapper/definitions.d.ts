@@ -32,14 +32,14 @@ interface ApiKeys {
     createApiKey(
         serviceAccountId: number,
         description: string
-    ): ApiKeySet;
+    ): Promise<ApiKeySet>;
 
     deleteApiKey(
         key: string
-    ): void;
+    ): Promise<void>;
 
     getApiKeys()
-    : ApiKey[]
+    : Promise<ApiKey[]>
 }
 
 interface CCloudCliWrapper{

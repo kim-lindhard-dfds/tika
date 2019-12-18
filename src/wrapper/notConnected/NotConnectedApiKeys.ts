@@ -15,7 +15,7 @@ export class NotConnectedApiKeys implements ApiKeys {
     constructor() {
         this.apiKeys = [];
     }
-    createApiKey(serviceAccountId: number, description: string): ApiKeySet {
+    async createApiKey(serviceAccountId: number, description: string): Promise<ApiKeySet> {
         let key = NotConnectedApiKeys.createRandomString(16, true);
 
         let apiKey: ApiKey = {
@@ -34,11 +34,11 @@ export class NotConnectedApiKeys implements ApiKeys {
         return apiKeySet;
     }
 
-    deleteApiKey(key: string): void {
+    async deleteApiKey(key: string): Promise<void> {
         this.apiKeys = this.apiKeys.filter(a => a.Key !== key);
     }
     
-    getApiKeys(): ApiKey[] {
+    async getApiKeys(): Promise<ApiKey[]> {
         return this.apiKeys;
     }
 

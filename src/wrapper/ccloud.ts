@@ -23,7 +23,7 @@ export default class Ccloud implements CCloudCliWrapper {
     const cli = process.env.TIKA_CCLOUD_BIN_PATH;
     let ccUser = process.env.TIKA_CC_USER;
     let ccPass = process.env.TIKA_CC_PASS;
-    
+
   }
 }
 
@@ -61,13 +61,35 @@ class CcloudServiceAccount implements ServiceAccounts {
 class CcloudApiKeys implements ApiKeys {
   ccloud: Ccloud;
 
-  createApiKey(serviceAccountId: number, description: string): ApiKeySet {
-    throw new Error("Method not implemented.");
-  }  deleteApiKey(key: string): void {
-    throw new Error("Method not implemented.");
+  async createApiKey(serviceAccountId: number, description: string): Promise<ApiKeySet> {
+    let cliOutput = await executeCli([
+      "api-key",
+      "create",
+      "--resource", process.env.TIKA_CCLOUD_CLUSTER_ID,
+      "--service-account-id", serviceAccountId +"",
+      "--description", description]
+    );
+
+    let cliObjects: any = parseSideColumns(cliOutput);
+    let apiKeySet: ApiKeySet = { Key: cliObjects.APIKey, Secret: cliObjects.Secret }
+
+    return apiKeySet;
   }
-  getApiKeys(): ApiKey[] {
-    throw new Error("Method not implemented.");
+
+  async deleteApiKey(key: string): Promise<void> {
+    await executeCli(["api-key", "delete", key]);
+  }
+  async getApiKeys(): Promise<ApiKey[]> {
+    let cliOutput = await executeCli(["api-key", "list"]);
+    let cliObjects = parse(cliOutput);
+
+    let apiKeys = cliObjects.map(function (obj) {
+      return { Key: obj.Key, Description: obj.Description } as ApiKey
+    });
+
+    console.log(apiKeys);
+
+    return apiKeys;
   }
 
   constructor(ccloud: Ccloud) {

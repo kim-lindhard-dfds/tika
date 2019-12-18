@@ -34,12 +34,12 @@ POST http://localhost:3000/api-keys
 content-type: application/json
 
 {
-    "serviceAccountId": "me",
-    "description": "A long and awesome discription"
+    "serviceAccountId": "32171",
+    "description": "for test delete at any time"
 }
 
 ###
 
 # Remove service account
-DELETE  http://localhost:3000/api-keys/123
+DELETE  http://localhost:3000/api-keys/RWK552CQXLNDQ25K
 content-type: application/json
