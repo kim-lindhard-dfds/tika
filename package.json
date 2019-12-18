@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "npx jest",
+    "watch-test": "npx jest --watch",
     "watch": "rm -rf dist && webpack --watch --hot --mode development",
     "build": "webpack --mode production",
     "dev": "nodemon ./dist/main.js",
