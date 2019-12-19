@@ -56,7 +56,16 @@ interface AccessControlLists {
         serviceAccountId: number,
         allow: boolean,
         operation: string,
-        topicPrefix: string
+        topicPrefix: string,
+        consumerGroupPrefix: string
+    ): Promise<void>
+
+    deleteAccessControlList(
+        serviceAccountId: number,
+        allow: boolean,
+        operation: string,
+        topicPrefix: string,
+        consumerGroupPrefix: string
     ): Promise<void>
 
     getAccessControlLists()

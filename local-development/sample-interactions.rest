@@ -57,7 +57,20 @@ POST http://localhost:3000/access-control-lists
 content-type: application/json
 
 {
-    "serviceAccountId": 112233,
+    "serviceAccountId": 993311,
+    "allow": false,
+    "operation": "CREATE",
+    "topicPrefix": "testing.delete.at.any.time."
+}
+
+###
+
+# Add Remove control list
+DELETE  http://localhost:3000/access-control-lists
+content-type: application/json
+
+{
+    "serviceAccountId": 993311,
     "allow": false,
     "operation": "CREATE",
     "topicPrefix": "testing.delete.at.any.time."

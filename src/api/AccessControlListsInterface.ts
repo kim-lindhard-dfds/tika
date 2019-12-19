@@ -4,15 +4,29 @@ export class AccessControlListsInterface {
     public configureApp(accessControlLists: AccessControlLists, app: Application) {
         
         app.post('/access-control-lists', async function (req: Request, res: Response) {
-            console.log('post /service-accounts');
+            console.log('post /access-control-lists');
 
-            let newServiceAccount = await accessControlLists.createAccessControlList(
+            await accessControlLists.createAccessControlList(
                 req.body.serviceAccountId as number,
                 req.body.allow as boolean,
                 req.body.operation,
                 req.body.topicPrefix,
+                req.body.consumerGroupPrefix
             );
-            res.json(newServiceAccount);
+            res.sendStatus(200);
+        });
+
+        app.delete('/access-control-lists', async function (req: Request, res: Response) {
+            console.log('delete /access-control-lists');
+
+            await accessControlLists.deleteAccessControlList(
+                req.body.serviceAccountId as number,
+                req.body.allow as boolean,
+                req.body.operation,
+                req.body.topicPrefix,
+                req.body.consumerGroupPrefix
+            );
+            res.sendStatus(200);
         });
 
         app.get('/access-control-lists', async function (req: Request, res: Response) {
@@ -22,11 +36,3 @@ export class AccessControlListsInterface {
         });
     }
 }
-
-/* 
-createAccessControlLis(
-    serviceAccountId: number, 
-    allow: boolean, 
-    operation: string, 
-    topicPrefix: string
-  ): Promise<void> { */
