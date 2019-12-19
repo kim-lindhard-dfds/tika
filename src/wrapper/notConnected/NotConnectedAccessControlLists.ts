@@ -1,4 +1,5 @@
 export class NotConnectedAccessControlLists implements AccessControlLists {
+ 
   private static instance: NotConnectedAccessControlLists;
 
 
@@ -10,7 +11,15 @@ export class NotConnectedAccessControlLists implements AccessControlLists {
       return NotConnectedAccessControlLists.instance;
   }
 
-  
+  createAccessControlList(
+    serviceAccountId: number, 
+    allow: boolean, 
+    operation: string, 
+    topicPrefix: string
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   getAccessControlLists(): Promise<AccessControlList[]> {
       throw new Error("Method not implemented.");
     }

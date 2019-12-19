@@ -1,5 +1,6 @@
 import {ServiceAccountsInterface} from "./api/service-accounts";
 import {ApiKeysInterface} from "./api/api-keys";
+import {AccessControlListsInterface} from "./api/AccessControlListsInterface";
 
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
@@ -36,6 +37,14 @@ apiKeysInterface.configureApp(
     cc.ApiKeys,
     app
 );
+
+const accessControlListsInterface = new AccessControlListsInterface();
+
+accessControlListsInterface.configureApp(
+    cc.Kafka.AccessControlLists,
+    app
+);
+
 
 const port = process.env.port || 3000;
 

@@ -52,6 +52,13 @@ interface ApiKeys {
 }
 
 interface AccessControlLists {
+    createAccessControlList(
+        serviceAccountId: number,
+        allow: boolean,
+        operation: string,
+        topicPrefix: string
+    ): Promise<void>
+
     getAccessControlLists()
     : Promise<AccessControlList[]>
 }
