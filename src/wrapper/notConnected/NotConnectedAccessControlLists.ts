@@ -11,22 +11,86 @@ export class NotConnectedAccessControlLists implements AccessControlLists {
     return NotConnectedAccessControlLists.instance;
   }
 
-  createAccessControlList(
+  accessControlLists: AccessControlList[];
+
+  constructor() {
+    this.accessControlLists = [];
+  }
+
+  async createAccessControlList(
     serviceAccountId: number,
     allow: boolean,
     operation: string,
     topicPrefix: string,
     consumerGroupPrefix: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+
+    var accessControlList = this.createAccessControlListObject(
+      serviceAccountId,
+      allow,
+      operation,
+      topicPrefix,
+      consumerGroupPrefix
+    );
+
+
+    if (this.accessControlLists
+      .some((a) => this.areEqual(a, accessControlList))) { return; }
+    
+      this.accessControlLists.push(accessControlList);
   }
 
-  deleteAccessControlList(serviceAccountId: number, allow: boolean, operation: string, topicPrefix: string,
-    consumerGroupPrefix: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteAccessControlList(
+    serviceAccountId: number,
+    allow: boolean,
+    operation: string,
+    topicPrefix: string,
+    consumerGroupPrefix: string
+  ): Promise<void> {
+
+    let accessControlList = this.createAccessControlListObject(
+      serviceAccountId,
+      allow,
+      operation,
+      topicPrefix,
+      consumerGroupPrefix
+    );
+
+    this.accessControlLists = this.accessControlLists
+      .filter(a => this.areEqual(a, accessControlList) == false);
   }
 
-  getAccessControlLists(): Promise<AccessControlList[]> {
-    throw new Error("Method not implemented.");
+  async getAccessControlLists(): Promise<AccessControlList[]> {
+    return this.accessControlLists;
   }
+
+  private areEqual(a: AccessControlList, b: AccessControlList): boolean {
+    return  a.ServiceAccountId === b.ServiceAccountId &&
+      a.Permission === b.Permission &&
+      a.Operation === b.Operation &&
+      a.Resource === b.Resource &&
+      a.Name === b.Name &&
+      a.Type === b.Type
+  }
+
+  private createAccessControlListObject(serviceAccountId: number,
+    allow: boolean,
+    operation: string,
+    topicPrefix: string,
+    consumerGroupPrefix: string): AccessControlList {
+    let name = "";
+    if (topicPrefix !== undefined) { name = topicPrefix; }
+    else if (consumerGroupPrefix !== undefined) { name = consumerGroupPrefix }
+    let accessControlList: AccessControlList = {
+      ServiceAccountId: serviceAccountId + "",
+      Permission: allow ? "ALLOW" : "DENY",
+      Operation: operation,
+      Resource: topicPrefix !== undefined ? "TOPIC" : consumerGroupPrefix !== undefined ? "GROUP" : "CLUSTER",
+      Name: name,
+      Type: topicPrefix !== undefined || consumerGroupPrefix !== undefined ? "PREFIXED" : "LITERAL"
+    }
+
+    return accessControlList;
+  }
+
 }

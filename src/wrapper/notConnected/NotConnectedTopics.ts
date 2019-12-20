@@ -1,24 +1,33 @@
 export class NotConnectedTopics implements Topics {
-    
-  private static instance: NotConnectedTopics;
 
-  public static getInstance(): NotConnectedTopics {
-    if (!NotConnectedTopics.instance) {
-        NotConnectedTopics.instance = new NotConnectedTopics();
+    private static instance: NotConnectedTopics;
+
+    public static getInstance(): NotConnectedTopics {
+        if (!NotConnectedTopics.instance) {
+            NotConnectedTopics.instance = new NotConnectedTopics();
+        }
+
+        return NotConnectedTopics.instance;
     }
 
-    return NotConnectedTopics.instance;
-  }
-    
-    getTopics(): Promise<string[]> {
-        throw new Error("Method not implemented.");
+    topics: string[];
+
+    constructor() {
+        this.topics = [];
     }
 
-    createTopic(name: string, partitionCount: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async getTopics(): Promise<string[]> {
+        return this.topics;
     }
 
-    deleteTopic(name: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async createTopic(name: string, partitionCount: number): Promise<void> {
+        let theTopicExists = this.topics.indexOf(name) !== -1;
+        if (theTopicExists) { return; }
+
+        this.topics.push(name);
+    }
+
+    async deleteTopic(name: string): Promise<void> {
+        this.topics = this.topics.filter(t => t !== name);
     }
 }
