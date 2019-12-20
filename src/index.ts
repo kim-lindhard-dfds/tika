@@ -1,6 +1,7 @@
 import {ServiceAccountsInterface} from "./api/service-accounts";
 import {ApiKeysInterface} from "./api/api-keys";
 import {AccessControlListsInterface} from "./api/AccessControlListsInterface";
+import {TopicsInterface} from "./api/TopicsInterface";
 
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
@@ -42,6 +43,14 @@ const accessControlListsInterface = new AccessControlListsInterface();
 
 accessControlListsInterface.configureApp(
     cc.Kafka.AccessControlLists,
+    app
+);
+
+
+const topicsInterface = new TopicsInterface();
+
+topicsInterface.configureApp(
+    cc.Kafka.Topics,
     app
 );
 

@@ -72,8 +72,16 @@ interface AccessControlLists {
     : Promise<AccessControlList[]>
 }
 
+interface Topics {
+    getTopics(): Promise<string[]>
+    createTopic(name: string, partitionCount: number): Promise<void>
+    deleteTopic(name: string): Promise<void>
+    
+}
+
 interface Kafka{
     AccessControlLists : AccessControlLists;
+    Topics: Topics;
 }
 
 interface CCloudCliWrapper{
