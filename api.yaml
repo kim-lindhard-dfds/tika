@@ -113,9 +113,9 @@ paths:
             schema:
               type: object
               properties:
-                ServiceAccountId:
+                serviceAccountId:
                   type: string
-                Description:
+                description:
                   type: string
     parameters: []
   '/api-keys/{id}':
@@ -180,29 +180,6 @@ paths:
                   type: string
             examples: {}
         description: ''
-    delete:
-      summary: ''
-      operationId: delete-access-control-lists
-      responses:
-        '200':
-          description: OK
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serviceAccountId:
-                  type: string
-                allow:
-                  type: string
-                operation:
-                  type: string
-                topicPrefix:
-                  type: string
-                consumerGroupPrefix:
-                  type: string
-      description: ''
   /topics:
     get:
       summary: Your GET endpoint
@@ -239,5 +216,29 @@ paths:
               properties:
                 name:
                   type: string
+  /access-control-lists/delete:
+    delete:
+      summary: ''
+      operationId: delete-access-control-lists-delete
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceAccountId:
+                  type: string
+                allow:
+                  type: string
+                operation:
+                  type: string
+                topicPrefix:
+                  type: string
+                consumerGroupPrefix:
+                  type: string
+        description: ''
 components:
   schemas: {}
