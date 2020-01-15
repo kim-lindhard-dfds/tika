@@ -16,8 +16,8 @@ export class AccessControlListsInterface {
             res.sendStatus(200);
         });
 
-        app.delete('/access-control-lists', async function (req: Request, res: Response) {
-            console.log('delete /access-control-lists');
+        app.post('/access-control-lists/delete', async function (req: Request, res: Response) {
+            console.log('delete /access-control-lists/delete');
 
             await accessControlLists.deleteAccessControlList(
                 req.body.serviceAccountId as number,
