@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  title: tika
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /service-accounts:
+    get:
+      summary: Get Service Accounts
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                    Id:
+                      type: string
+                    Description:
+                      type: string
+      operationId: get-service-accounts
+    post:
+      summary: Create new Service Account
+      operationId: post-service-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: string
+                  Name:
+                    type: string
+                  Description:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+        description: ''
+    parameters: []
+  '/service-accounts/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    delete:
+      summary: Delete Service Account
+      operationId: delete-service-accounts-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+  /api-keys:
+    get:
+      summary: Get API keys
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Key:
+                      type: string
+                    Description:
+                      type: string
+                  required:
+                    - Key
+      operationId: get-api-keys
+    post:
+      summary: Create new API Key
+      operationId: post-api-keys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ServiceAccountId:
+                    type: string
+                  Description:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ServiceAccountId:
+                  type: string
+                Description:
+                  type: string
+    parameters: []
+  '/api-keys/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    delete:
+      summary: ''
+      operationId: delete-api-keys-id
+      responses:
+        '200':
+          description: OK
+  /access-control-lists:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ServiceAccountId:
+                      type: string
+                    Permission:
+                      type: string
+                    Resource:
+                      type: string
+                    Name:
+                      type: string
+                    Type:
+                      type: string
+      operationId: get-access-control-lists
+    post:
+      summary: Create ACL
+      operationId: post-access-control-lists
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceAccountId:
+                  type: string
+                allow:
+                  type: boolean
+                operation:
+                  type: string
+                topicPrefix:
+                  type: string
+                consumerGroupPrefix:
+                  type: string
+            examples: {}
+        description: ''
+    delete:
+      summary: ''
+      operationId: delete-access-control-lists
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceAccountId:
+                  type: string
+                allow:
+                  type: string
+                operation:
+                  type: string
+                topicPrefix:
+                  type: string
+                consumerGroupPrefix:
+                  type: string
+      description: ''
+  /topics:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-topics
+    post:
+      summary: ''
+      operationId: post-topics
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                partitionCount:
+                  type: string
+    delete:
+      summary: ''
+      operationId: delete-topics
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+components:
+  schemas: {}
