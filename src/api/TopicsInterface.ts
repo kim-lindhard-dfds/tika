@@ -21,11 +21,11 @@ export class TopicsInterface {
             res.sendStatus(200);
         });
 
-        app.delete('/topics', async function (req: Request, res: Response) {
-            console.log('delete /topics');
+        app.delete('/topics/:name', async function (req: Request, res: Response) {
+            console.log('delete /topics/' + req.params.name);
 
             await topic.deleteTopic(
-                req.body.name,
+                req.params.name,
             );
 
             res.sendStatus(200);
