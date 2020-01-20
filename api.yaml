@@ -202,20 +202,6 @@ paths:
                   type: string
                 partitionCount:
                   type: string
-    delete:
-      summary: ''
-      operationId: delete-topics
-      responses:
-        '200':
-          description: OK
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
   /access-control-lists/delete:
     delete:
       summary: ''
@@ -240,5 +226,18 @@ paths:
                 consumerGroupPrefix:
                   type: string
         description: ''
+  '/topics/{name}':
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+    delete:
+      summary: ''
+      operationId: delete-topics-name
+      responses:
+        '200':
+          description: OK
 components:
   schemas: {}
