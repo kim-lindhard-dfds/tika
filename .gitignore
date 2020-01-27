@@ -99,3 +99,34 @@ typings/
 # End of https://www.gitignore.io/api/node,visualstudiocode
 
 ccloud-config
+
+# Files built by Visual Studio
+bin/
+obj/
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+.idea
