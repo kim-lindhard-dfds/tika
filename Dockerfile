@@ -7,7 +7,7 @@ RUN npm install
 
 COPY webpack.config.js .
 COPY tsconfig.json .
-COPY ./src/ ./src/
+COPY ./src/server ./src/
 
 RUN npm run build
 
