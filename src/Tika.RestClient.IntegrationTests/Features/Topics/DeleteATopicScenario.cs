@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tika.RestClient.Features.Topics.Models;
 using Tika.RestClient.IntegrationTests.Features.Factories;
@@ -34,8 +35,8 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
             _topicName = Guid.NewGuid().ToString();
             var topicCreate = new TopicCreate
             {
-                Name = _topicName,
-                Partitions = 1
+                name = _topicName,
+                partitionCount = 1
             };
             
             await client.Topics.CreateAsync(topicCreate);
@@ -51,7 +52,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         }
         private void Then_the_topic_is_removed()
         {
-            Assert.Empty(_returnedTopics);
+           Assert.Empty(_returnedTopics.Where(t => t == _topicName));
         }
     }
 }

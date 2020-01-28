@@ -35,8 +35,8 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
             using var client = LocalhostRestClient.Create();
             _topicCreate = new TopicCreate
             {
-                Name = Guid.NewGuid().ToString(), 
-                Partitions = 1
+                name = Guid.NewGuid().ToString(), 
+                partitionCount = 1
             };
             
             await client.Topics.CreateAsync(_topicCreate);
@@ -49,14 +49,12 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
         private void Then_the_topic_is_returned()
         {
-            Assert.Single(_returnedTopics);
+          
         }
-        
         
         private void And_it_has_the_same_values_as_created_topic()
         {    
-            
-            Assert.Equal(_topicCreate.Name, _returnedTopics.Single());
+            _returnedTopics.Single(t => t == _topicCreate.name);
         }
 
     }
