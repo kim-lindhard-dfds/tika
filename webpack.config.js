@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const nodeExternals = require('webpack-node-externals');
 
 const main = env => {
   return {
@@ -8,7 +7,6 @@ const main = env => {
       main: ["./node_modules/regenerator-runtime/runtime.js", "./src/index.ts"],
     },
     target: "node",
-    externals: [nodeExternals()],
     devtool: "source-map",
     output: {
       path: path.resolve(__dirname, "dist"),
