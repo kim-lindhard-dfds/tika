@@ -7,7 +7,7 @@ RUN npm install
 
 COPY webpack.config.js .
 COPY tsconfig.json .
-COPY ./src/server ./src/
+COPY ./src/ ./src/
 
 RUN npm run build
 
@@ -35,7 +35,6 @@ WORKDIR /app
 
 COPY --from=Builder /app/dist/main.js .
 
-COPY ./ccloud-config /root/.ccloud/config
 COPY ./login.sh /app/login.sh
 COPY ./entrypoint.sh /app/entrypoint.sh
 
