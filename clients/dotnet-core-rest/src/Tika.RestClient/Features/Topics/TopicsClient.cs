@@ -29,6 +29,7 @@ namespace Tika.RestClient.Features.Topics
             return topics;
         }
 
+        /// <exception cref="Tika.RestClient.Features.Topics.Exceptions.TopicAlreadyExistsException">Thrown when topic with given name already exists</exception>
         public async Task CreateAsync(TopicCreate topicCreate)
         {
             var payload = JsonConvert.SerializeObject(topicCreate);
