@@ -1,6 +1,6 @@
 using System;
 using System.Net.Http;
-using Tika.RestClient.Features.Factories;
+using Tika.RestClient.Factories;
 
 namespace Tika.RestClient.IntegrationTests.Features.Factories
 {

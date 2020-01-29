@@ -1,7 +1,7 @@
 using System.Net.Http;
 using Tika.RestClient.Features.Topics;
 
-namespace Tika.RestClient.Features
+namespace Tika.RestClient
 {
     internal class Client : IRestClient
     {

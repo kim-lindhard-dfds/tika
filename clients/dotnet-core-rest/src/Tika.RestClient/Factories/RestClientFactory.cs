@@ -1,8 +1,8 @@
 using System.Net.Http;
 
-namespace Tika.RestClient.Features.Factories
+namespace Tika.RestClient.Factories
 {
-    public class RestClientFactory
+    public static class RestClientFactory
     {
         public static IRestClient Create(HttpClient httpClient)
         {
