@@ -23,9 +23,8 @@ namespace Tika.RestClient.Features.Topics
             var httpResponseMessage = await _httpClient.GetAsync(
                 new Uri(TOPICS_ROUTE, UriKind.Relative)
             );
-            var content = await httpResponseMessage.Content.ReadAsStringAsync();
-
-            var topics = JsonConvert.DeserializeObject<IEnumerable<string>>(content);
+            
+            var topics = await Utilities.Parse<IEnumerable<string>>(httpResponseMessage);
 
             return topics;
         }
