@@ -52,9 +52,16 @@ namespace Tika.RestClient.Features.Acls
             );
         }
 
-        public async Task DeleteAsync(Acl aclDelete)
+        public async Task DeleteAsync(AclCreate aclDelete)
         {
-            var payload = JsonConvert.SerializeObject(aclDelete);
+            var payload = JsonConvert.SerializeObject(new
+            {
+                serviceAccountId = aclDelete.ServiceAccountId,
+                allow = aclDelete.Allow,
+                operation = aclDelete.Operation,
+                topicPrefix = aclDelete.TopicPrefix,
+                consumerGroupPrefix = aclDelete.ConsumerGroupPrefix
+            });
 
             var content = new StringContent(
                 payload,
