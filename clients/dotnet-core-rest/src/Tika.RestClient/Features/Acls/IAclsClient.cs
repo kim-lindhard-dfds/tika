@@ -7,7 +7,7 @@ namespace Tika.RestClient.Features.Acls
     public interface IAclsClient
     {
         Task<IEnumerable<Acl>> GetAllAsync();
-        Task<Acl> CreateAsync(Acl aclCreate);
+        Task CreateAsync(AclCreate aclCreate);
         Task DeleteAsync(Acl aclDelete);
     }
 }

@@ -29,9 +29,16 @@ namespace Tika.RestClient.Features.Acls
             return acls;
         }
 
-        public async Task<Acl> CreateAsync(Acl aclCreate)
+        public async Task CreateAsync(AclCreate aclCreate)
         {
-            var payload = JsonConvert.SerializeObject(aclCreate);
+            var payload = JsonConvert.SerializeObject(new
+            {
+                serviceAccountId = aclCreate.ServiceAccountId,
+                allow = aclCreate.Allow,
+                operation = aclCreate.Operation,
+                topicPrefix = aclCreate.TopicPrefix,
+                consumerGroupPrefix = aclCreate.ConsumerGroupPrefix
+            });
 
             var content = new StringContent(
                 payload,
@@ -39,14 +46,10 @@ namespace Tika.RestClient.Features.Acls
                 "application/json"
             );
 
-            var response = await _httpClient.PostAsync(
+            await _httpClient.PostAsync(
                 new Uri(ACLS_ROUTE, UriKind.Relative),
                 content
             );
-
-            var acl = await Utilities.Parse<Acl>(response);
-
-            return acl;
         }
 
         public async Task DeleteAsync(Acl aclDelete)
