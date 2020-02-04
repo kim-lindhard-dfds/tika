@@ -20,13 +20,13 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
         [Fact]
         public async Task GetAllWithSingleAclScenario()
         {
-                  Given_a_acl_client();
+                  Given_an_acl_client();
             await And_a_single_acl();
             await When_GetAll_is_called();
                   Then_the_acl_is_returned();
         }
         
-        private void Given_a_acl_client()
+        private void Given_an_acl_client()
         {
             _client = LocalhostRestClient.Create();
         }
