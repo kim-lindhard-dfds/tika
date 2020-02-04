@@ -29,5 +29,6 @@ steps:
       export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
 
       cp ${DOWNLOADSECUREFILE_SECUREFILEPATH} ./ccloud-config
+      cd server
       make release BUILD_NUMBER=$(Build.BuildId)
     displayName: 'Build a deployment artifact'
