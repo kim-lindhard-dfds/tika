@@ -25,7 +25,6 @@ namespace Tika.RestClient.IntegrationTests.Features.ApiKeys
             await And_a_single_apiKey();
             await When_GetAll_is_called();
                   Then_the_apiKey_is_returned();
-                  And_it_has_the_same_values_as_created_apiKey();
         }
         
         private void Given_a_apiKey_client()
@@ -61,12 +60,7 @@ namespace Tika.RestClient.IntegrationTests.Features.ApiKeys
         
         private void Then_the_apiKey_is_returned()
         {
-          
-        }
-        
-        private void And_it_has_the_same_values_as_created_apiKey()
-        {    
-            var apiKey = _returnedApiKeys.Single(t => t.Key == _apiKey.Key);
+             _returnedApiKeys.Single(t => t.Key == _apiKey.Key);
         }
     }
 }

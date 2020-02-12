@@ -21,7 +21,6 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
             await And_a_single_service_account();
             await When_GetAll_is_called();
                   Then_the_serviceAccount_is_returned();
-                  And_it_has_the_same_values_as_created_serviceAccount();
         }
         
         private void Given_a_serviceAccount_client()
@@ -48,11 +47,6 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
         
         private void Then_the_serviceAccount_is_returned()
         {
-          
-        }
-        
-        private void And_it_has_the_same_values_as_created_serviceAccount()
-        {    
             var serviceAccount = _returnedServiceAccounts.Single(t => t.Name == _serviceAccountCreate.name);
             Assert.Equal(_serviceAccountCreate.description, serviceAccount.Description);
         }

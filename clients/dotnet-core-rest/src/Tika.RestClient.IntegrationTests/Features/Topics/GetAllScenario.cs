@@ -21,7 +21,6 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
             await And_a_single_topic();
             await When_GetAll_is_called();
                   Then_the_topic_is_returned();
-                  And_it_has_the_same_values_as_created_topic();
         }
 
       
@@ -49,13 +48,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
         private void Then_the_topic_is_returned()
         {
-          
-        }
-        
-        private void And_it_has_the_same_values_as_created_topic()
-        {    
             _returnedTopics.Single(t => t == _topicCreate.name);
         }
-
     }
 }
