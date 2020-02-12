@@ -14,7 +14,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
         private IRestClient _client;
         private ServiceAccountCreate _serviceAccountCreate;
         private ServiceAccount _serviceAccount;
-        private AclCreate _aclCreate;
+        private AclCreateDelete _aclCreateDelete;
         private IEnumerable<Acl> _returnedAcls;
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
             
             _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreate);
             
-            _aclCreate = new AclCreate
+            _aclCreateDelete = new AclCreateDelete
             {
                 ServiceAccountId = Convert.ToInt64(_serviceAccount.Id),
                 Allow = true,
@@ -50,7 +50,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
                 TopicPrefix = "itsAThing"
             };
 
-            await client.Acls.CreateAsync(_aclCreate);
+            await client.Acls.CreateAsync(_aclCreateDelete);
         }
         
         private async Task When_GetAll_is_called()
@@ -61,10 +61,10 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
         private void Then_the_acl_is_returned()
         {
             var serviceAccount = _returnedAcls
-                .Where(acl => acl.Operation == _aclCreate.Operation)
-                .Where(acl => acl.Name == _aclCreate.TopicPrefix)
-                .Where(acl => acl.ConsumerGroupPrefix == _aclCreate.ConsumerGroupPrefix)
-                .First(acl => acl.ServiceAccountId == _aclCreate.ServiceAccountId);
+                .Where(acl => acl.Operation == _aclCreateDelete.Operation)
+                .Where(acl => acl.Name == _aclCreateDelete.TopicPrefix)
+                .Where(acl => acl.ConsumerGroupPrefix == _aclCreateDelete.ConsumerGroupPrefix)
+                .First(acl => acl.ServiceAccountId == _aclCreateDelete.ServiceAccountId);
         }
     }
 }

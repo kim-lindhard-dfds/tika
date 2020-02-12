@@ -1,6 +1,6 @@
 namespace Tika.RestClient.Features.Acls.Models
 {
-    public class AclCreate
+    public class AclCreateDelete
     {
         public long ServiceAccountId { get; set; }
         public bool Allow { get; set; }
@@ -8,9 +8,9 @@ namespace Tika.RestClient.Features.Acls.Models
         public string TopicPrefix { get; set; }
         public string ConsumerGroupPrefix { get; set; }
         
-        public AclCreate() {}
+        public AclCreateDelete() {}
 
-        public AclCreate(long serviceAccountId, bool allow, string operation, string topicPrefix = "", string consumerGroupPrefix = "")
+        public AclCreateDelete(long serviceAccountId, bool allow, string operation, string topicPrefix = "", string consumerGroupPrefix = "")
         {
             ServiceAccountId = serviceAccountId;
             Allow = allow;

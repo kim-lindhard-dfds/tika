@@ -29,15 +29,15 @@ namespace Tika.RestClient.Features.Acls
             return acls;
         }
 
-        public async Task CreateAsync(AclCreate aclCreate)
+        public async Task CreateAsync(AclCreateDelete aclCreateDelete)
         {
             var payload = JsonConvert.SerializeObject(new
             {
-                serviceAccountId = aclCreate.ServiceAccountId,
-                allow = aclCreate.Allow,
-                operation = aclCreate.Operation,
-                topicPrefix = aclCreate.TopicPrefix,
-                consumerGroupPrefix = aclCreate.ConsumerGroupPrefix
+                serviceAccountId = aclCreateDelete.ServiceAccountId,
+                allow = aclCreateDelete.Allow,
+                operation = aclCreateDelete.Operation,
+                topicPrefix = aclCreateDelete.TopicPrefix,
+                consumerGroupPrefix = aclCreateDelete.ConsumerGroupPrefix
             });
 
             var content = new StringContent(
@@ -52,7 +52,7 @@ namespace Tika.RestClient.Features.Acls
             );
         }
 
-        public async Task DeleteAsync(AclCreate aclDelete)
+        public async Task DeleteAsync(AclCreateDelete aclDelete)
         {
             var payload = JsonConvert.SerializeObject(new
             {
