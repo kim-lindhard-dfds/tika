@@ -4,7 +4,7 @@ const path = require("path");
 const main = env => {
   return {
     entry: {
-      main: ["./node_modules/regenerator-runtime/runtime.js", "./src/index.ts"],
+      main: ["./node_modules/regenerator-runtime/runtime.js", "./src/server/index.ts"],
     },
     target: "node",
     devtool: "source-map",
