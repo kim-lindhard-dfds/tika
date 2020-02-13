@@ -13,7 +13,6 @@ namespace Tika.RestClient.Factories
 
         public static IRestClient CreateFromConfiguration(HttpClient httpClient, IOptions<ClientOptions> options)
         {
-            Console.WriteLine("xaxa");
             if (options.Value?.TIKA_API_ENDPOINT == null)
             {
                 throw new TikaRestClientInvalidConfigurationException("TIKA_API_ENDPOINT");
