@@ -56,7 +56,6 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
             {
                 _topicAlreadyExistsException = e;
                 Console.WriteLine(e);
-                throw;
             }
         }
 

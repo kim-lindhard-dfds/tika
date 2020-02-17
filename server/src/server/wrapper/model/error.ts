@@ -5,3 +5,11 @@ export class CcloudSessionExpiredException extends Error {
     this.message = "Login session has expired";
   }
 }
+
+export class CcloudTopicAlreadyExistsException extends Error  {
+  constructor(args: any = null) {
+    super(args);
+    this.name = "CcloudTopicAlreadyExists";
+    this.message = "A Topic with the given name already exists";
+  }
+}
