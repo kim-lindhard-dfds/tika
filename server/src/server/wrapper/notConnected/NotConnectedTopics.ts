@@ -1,4 +1,4 @@
-import {CcloudTopicAlreadyExistsException} from "../model/error";
+import {TopicAlreadyExistsException} from "../model/error";
 
 export class NotConnectedTopics implements Topics {
 
@@ -25,7 +25,7 @@ export class NotConnectedTopics implements Topics {
     async createTopic(name: string, partitionCount: number): Promise<void> {
         let theTopicExists = this.topics.indexOf(name) !== -1;
         if (theTopicExists) {
-            throw new CcloudTopicAlreadyExistsException();
+            throw new TopicAlreadyExistsException();
         }
 
         this.topics.push(name);

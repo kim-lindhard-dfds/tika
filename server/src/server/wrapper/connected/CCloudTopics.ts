@@ -1,6 +1,6 @@
 import { parse } from "./../parser";
 import { executeCli } from "./executeCli";
-import {CcloudTopicAlreadyExistsException} from "../model/error";
+import {TopicAlreadyExistsException} from "../model/error";
 
 
 export class CcloudTopics implements Topics {
@@ -28,7 +28,7 @@ export class CcloudTopics implements Topics {
                 "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
             ]);
         } else {
-            throw new CcloudTopicAlreadyExistsException();
+            throw new TopicAlreadyExistsException();
         }
     }
 

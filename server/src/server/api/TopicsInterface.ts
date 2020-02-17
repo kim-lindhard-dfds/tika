@@ -1,5 +1,5 @@
 import { Request, Response, Application } from 'express'
-import {CcloudTopicAlreadyExistsException} from "../wrapper/model/error";
+import {TopicAlreadyExistsException} from "../wrapper/model/error";
 import { transcode } from 'buffer';
 
 export class TopicsInterface {
@@ -24,7 +24,7 @@ export class TopicsInterface {
             }
             catch (err) {
                 console.log(err);
-                if (err.name.valueOf() === new CcloudTopicAlreadyExistsException().name.valueOf()) {
+                if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
                     res.status(409).json({errName: err.name, errMessage: err.message});
                 } else {
                     res.status(500).json({errName: err.name, errMessage: err.message});

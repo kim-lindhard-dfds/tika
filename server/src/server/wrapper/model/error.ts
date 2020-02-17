@@ -6,7 +6,7 @@ export class CcloudSessionExpiredException extends Error {
   }
 }
 
-export class CcloudTopicAlreadyExistsException extends Error  {
+export class TopicAlreadyExistsException extends Error  {
   constructor(args: any = null) {
     super(args);
     this.name = "CcloudTopicAlreadyExists";
