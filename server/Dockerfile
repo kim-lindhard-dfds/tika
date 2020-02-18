@@ -20,7 +20,7 @@ RUN apt-get -y install curl expect cron
 WORKDIR /ccloud
 
 # download ccloud cli tool
-RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /ccloud/bin
+RUN curl -L https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/install.sh | sh -s -- -b /ccloud/bin
 
 ENV TIKA_CCLOUD_BIN_PATH="/ccloud/bin/ccloud"
 ENV PATH "$PATH:/ccloud/bin"
