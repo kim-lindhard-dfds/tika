@@ -1,5 +1,7 @@
 import { parse } from "./../parser";
 import { executeCli } from "./executeCli";
+import {TopicAlreadyExistsException} from "../model/error";
+
 
 export class CcloudTopics implements Topics {
 
@@ -15,12 +17,19 @@ export class CcloudTopics implements Topics {
     }
 
     async createTopic(name: string, partitionCount: number): Promise<void> {
-        await executeCli([
-            "kafka", "topic",
-            "create", name,
-            "--partitions", partitionCount + "",
-            "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
-        ]);
+        let topics = await this.getTopics();
+
+        let topicFound = topics.find(v => v.valueOf() === name.valueOf());
+        if (topicFound === undefined) {
+            await executeCli([
+                "kafka", "topic",
+                "create", name,
+                "--partitions", partitionCount + "",
+                "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
+            ]);
+        } else {
+            throw new TopicAlreadyExistsException();
+        }
     }
 
     async deleteTopic(name: string): Promise<void> {

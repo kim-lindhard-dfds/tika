@@ -1,3 +1,5 @@
+import {TopicAlreadyExistsException} from "../model/error";
+
 export class NotConnectedTopics implements Topics {
 
     private static instance: NotConnectedTopics;
@@ -22,7 +24,9 @@ export class NotConnectedTopics implements Topics {
 
     async createTopic(name: string, partitionCount: number): Promise<void> {
         let theTopicExists = this.topics.indexOf(name) !== -1;
-        if (theTopicExists) { return; }
+        if (theTopicExists) {
+            throw new TopicAlreadyExistsException();
+        }
 
         this.topics.push(name);
     }

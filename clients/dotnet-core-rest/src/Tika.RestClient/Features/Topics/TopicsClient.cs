@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Tika.RestClient.Features.Topics.Models;
 using Newtonsoft.Json;
+using Tika.RestClient.Features.Topics.Exceptions;
 
 namespace Tika.RestClient.Features.Topics
 {
@@ -29,6 +31,7 @@ namespace Tika.RestClient.Features.Topics
             return topics;
         }
 
+        /// <exception cref="Tika.RestClient.Features.Topics.Exceptions.TopicAlreadyExistsException">Thrown when topic with given name already exists</exception>
         public async Task CreateAsync(TopicCreate topicCreate)
         {
             var payload = JsonConvert.SerializeObject(topicCreate);
@@ -39,10 +42,20 @@ namespace Tika.RestClient.Features.Topics
                 "application/json"
             );
 
-            await _httpClient.PostAsync(
+            var res = await _httpClient.PostAsync(
                 new Uri(TOPICS_ROUTE, UriKind.Relative),
                 content
             );
+
+            if (res.StatusCode == HttpStatusCode.Conflict)
+            {
+                var rawText = await res.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<TikaGenericError>(rawText);
+                if (responseData.ErrName == "CcloudTopicAlreadyExists")
+                {
+                    throw new TopicAlreadyExistsException(responseData.ErrMessage);
+                }
+            }
         }
 
         public async Task DeleteAsync(string topicName)
@@ -53,5 +66,11 @@ namespace Tika.RestClient.Features.Topics
 
             httpResponseMessage.EnsureSuccessStatusCode();
         }
+    }
+
+    internal class TikaGenericError
+    {
+        public string ErrName { get; set; }
+        public string ErrMessage { get; set; }
     }
 }

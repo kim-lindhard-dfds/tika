@@ -1,4 +1,6 @@
 import { Request, Response, Application } from 'express'
+import {TopicAlreadyExistsException} from "../wrapper/model/error";
+import { transcode } from 'buffer';
 
 export class TopicsInterface {
 
@@ -12,13 +14,29 @@ export class TopicsInterface {
 
         app.post('/topics', async function (req: Request, res: Response) {
             console.log('post /topics');
+            let good : boolean = true;
 
-            await topic.createTopic(
-                req.body.name,
-                parseInt(req.body.partitionCount),
-            );
+            try {
+                await topic.createTopic(
+                    req.body.name,
+                    parseInt(req.body.partitionCount),
+                );
+            }
+            catch (err) {
+                console.log(err);
+                if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
+                    res.status(409).json({errName: err.name, errMessage: err.message});
+                } else {
+                    res.status(500).json({errName: err.name, errMessage: err.message});
+                }
 
-            res.sendStatus(200);
+                good = false;
+            }
+
+
+            if (good) {
+                res.sendStatus(200);
+            }
         });
 
         app.delete('/topics/:name', async function (req: Request, res: Response) {
