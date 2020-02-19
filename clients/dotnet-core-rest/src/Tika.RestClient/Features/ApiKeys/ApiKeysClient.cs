@@ -31,7 +31,11 @@ namespace Tika.RestClient.Features.ApiKeys
 
         public async Task<ApiKey> CreateAsync(ApiKeyCreate apiKeyCreate)
         {
-            var payload = JsonConvert.SerializeObject(apiKeyCreate);
+            var payload = JsonConvert.SerializeObject(new
+            {
+                serviceAccountId = apiKeyCreate.ServiceAccountId,
+                description = apiKeyCreate.Description
+            });
 
             var content = new StringContent(
                 payload,
