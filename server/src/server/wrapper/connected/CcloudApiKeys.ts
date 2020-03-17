@@ -27,7 +27,7 @@ export class CcloudApiKeys implements ApiKeys {
       let cliObjects = parse(cliOutput);
   
       let apiKeys = cliObjects.map(function (obj) {
-        return { Key: obj.Key, Description: obj.Description } as ApiKey
+        return { Key: obj.Key, Description: obj.Description, Owner: obj.Owner } as ApiKey
       });
   
       console.log(apiKeys);

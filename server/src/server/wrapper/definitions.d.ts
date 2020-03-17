@@ -12,6 +12,7 @@ type ApiKeySet = {
 type ApiKey = {
     Key: string;
     Description: string;
+    Owner: string;
 }
 
 type AccessControlList = {
