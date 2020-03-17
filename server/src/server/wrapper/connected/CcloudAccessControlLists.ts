@@ -61,7 +61,7 @@ export class CcloudAccessControlLists implements AccessControlLists {
         let command = [
             "kafka", "acl", createOrDelete,
             "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID,
-            "--service-account-id", serviceAccountId + "",
+            "--service-account", serviceAccountId + "",
             "--operation", operation
         ];
 

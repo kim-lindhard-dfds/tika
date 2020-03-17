@@ -9,7 +9,7 @@ export class CcloudApiKeys implements ApiKeys {
         "api-key",
         "create",
         "--resource", process.env.TIKA_CCLOUD_CLUSTER_ID,
-        "--service-account-id", serviceAccountId + "",
+        "--service-account", serviceAccountId + "",
         "--description", description]
       );
   
