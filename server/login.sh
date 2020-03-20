@@ -1,6 +1,5 @@
 #!/usr/bin/expect
-
-spawn "$env(TIKA_CCLOUD_BIN_PATH)" login
+spawn ccloud login
 
 expect "Email: "
 
