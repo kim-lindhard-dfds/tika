@@ -74,7 +74,6 @@ RUN chown appuser /var/spool/cron/crontabs
 # CMD ['sh', '-c', 'crond && gulp']
 #/etc/init.d/crond start
 
-RUN touch /var/log/cron.log
 #RUN crond start
 
 
@@ -89,17 +88,19 @@ RUN touch /var/log/cron.log
 
 #RUN crond start
 
+RUN touch /var/log/cron.log
 
-RUN echo -e '* * * * * echo hello' >> /var/spool/cron/crontabs/root
+#RUN echo -e '* * * * * echo hello' >> /var/spool/cron/crontabs/root
+#RUN echo '* * * * * /app/login.sh' >> /etc/crontabs/root
+RUN echo '* * * * * /app/login.sh' >> /etc/crontabs/appuser
+#RUN echo '* * * * * appuser echo /app/login.sh' >> /var/spool/cron/crontab
 
-
-COPY ./cron-start.sh /app/cron-start.sh
-COPY ./docker-cmd.sh /app/docker-cmd.sh
+#COPY ./cron-start.sh /app/cron-start.sh
+#RUN  /app/cron-start.sh
 
 USER appuser
 ENTRYPOINT /app/entrypoint.sh
-#CMD ["/docker-cmd.sh"]
+
 USER root
 CMD crond -b -L /var/log/cron.log "$@"
-#CMD ["/usr/sbin/crond", "-f"]
 
