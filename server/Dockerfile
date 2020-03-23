@@ -39,8 +39,8 @@ COPY ./entrypoint.sh /app/entrypoint.sh
 
 
 # Add appuser user
-RUN    addgroup -g 1001 -S appuser \
-    && adduser -u 1001 -S appuser -G appuser \ 
+RUN    addgroup -g 3000 -S appuser \
+    && adduser -u 10001 -S appuser -G appuser \ 
     && chown -R appuser:appuser /app
 
 USER appuser
