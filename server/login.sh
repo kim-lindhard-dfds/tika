@@ -11,3 +11,5 @@ send -- "$env(TIKA_CC_PASS)\r"
 
 set timeout 600
 expect eof
+
+send_user "Confluent cloud login successful\n"
