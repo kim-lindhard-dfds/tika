@@ -43,10 +43,5 @@ RUN    addgroup -g 1001 -S appuser \
     && adduser -u 1001 -S appuser -G appuser \ 
     && chown -R appuser:appuser /app
 
-
 USER appuser
 ENTRYPOINT /app/entrypoint.sh
-
-USER root
-CMD crond -b -L /var/log/cron.log "$@"
-
