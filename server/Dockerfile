@@ -1,5 +1,6 @@
+# https://github.com/nodejs/docker-node/blob/6bc7fe5d018f2235cdcd2f7681990cee9d096497/13/alpine3.11/Dockerfile
 ## Node js app builder ##
-FROM node:12.13.1-alpine3.9 AS Builder
+FROM node:13.10.1-alpine3.11 AS Builder
 
 WORKDIR /app
 
@@ -13,15 +14,13 @@ COPY ./src/ ./src/
 RUN npm run build
 
 
-## Runner
-FROM openjdk:jre-alpine AS Runner
+## Node js app runner ##
+FROM node:13.10.1-alpine3.11 As Runner 
 
-
-# Install curl, expect & nodejs
+# Install curl & expect
 RUN apk add --update \
-    curl expect nodejs-current \
+    curl expect \
     && rm -rf /var/cache/apk/*
-
 
 # Install ccloud cli tool
 RUN curl -L https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/install.sh | sh -s -- -b /ccloud/bin
@@ -38,10 +37,8 @@ COPY ./login.sh /app/login.sh
 COPY ./entrypoint.sh /app/entrypoint.sh
 
 
-# Add appuser user
-RUN    addgroup -g 3000 -S appuser \
-    && adduser -u 10001 -S appuser -G appuser \ 
-    && chown -R appuser:appuser /app
+# user:1000 group: 1000
+USER node
 
-USER appuser
+
 ENTRYPOINT /app/entrypoint.sh
