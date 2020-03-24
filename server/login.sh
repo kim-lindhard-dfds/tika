@@ -1,6 +1,5 @@
 #!/usr/bin/expect
-
-spawn "$env(TIKA_CCLOUD_BIN_PATH)" login
+spawn ccloud login
 
 expect "Email: "
 
@@ -12,3 +11,5 @@ send -- "$env(TIKA_CC_PASS)\r"
 
 set timeout 600
 expect eof
+
+send_user "Confluent cloud login successful\n"

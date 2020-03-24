@@ -1,4 +1,6 @@
-FROM node:12.13.1-alpine3.9 AS Builder
+# https://github.com/nodejs/docker-node/blob/6bc7fe5d018f2235cdcd2f7681990cee9d096497/13/alpine3.11/Dockerfile
+## Node js app builder ##
+FROM node:13.10.1-alpine3.11 AS Builder
 
 WORKDIR /app
 
@@ -11,31 +13,32 @@ COPY ./src/ ./src/
 
 RUN npm run build
 
-## Runner
-FROM openjdk:jre-slim AS Runner
 
-RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install curl expect cron
+## Node js app runner ##
+FROM node:13.10.1-alpine3.11 As Runner 
 
-WORKDIR /ccloud
+# Install curl & expect
+RUN apk add --update \
+    curl expect \
+    && rm -rf /var/cache/apk/*
 
-# download ccloud cli tool
+# Install ccloud cli tool
 RUN curl -L https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/install.sh | sh -s -- -b /ccloud/bin
 
 ENV TIKA_CCLOUD_BIN_PATH="/ccloud/bin/ccloud"
 ENV PATH "$PATH:/ccloud/bin"
 
-# install nodejs
-RUN apt-get install -y gnupg
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
-RUN apt-get install -y nodejs
+RUN ccloud version
 
 
-WORKDIR /app
-
-COPY --from=Builder /app/dist/main.js .
-
+# Copy app & supporting scripts
+COPY --from=Builder /app/dist/main.js /app/main.js
 COPY ./login.sh /app/login.sh
 COPY ./entrypoint.sh /app/entrypoint.sh
+
+
+# user:1000 group: 1000
+USER node
+
 
 ENTRYPOINT /app/entrypoint.sh
