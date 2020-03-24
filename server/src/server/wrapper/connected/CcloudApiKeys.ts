@@ -9,7 +9,7 @@ export class CcloudApiKeys implements ApiKeys {
         "api-key",
         "create",
         "--resource", process.env.TIKA_CCLOUD_CLUSTER_ID,
-        "--service-account-id", serviceAccountId + "",
+        "--service-account", serviceAccountId + "",
         "--description", description]
       );
   
@@ -27,11 +27,9 @@ export class CcloudApiKeys implements ApiKeys {
       let cliObjects = parse(cliOutput);
   
       let apiKeys = cliObjects.map(function (obj) {
-        return { Key: obj.Key, Description: obj.Description } as ApiKey
+        return { Key: obj.Key, Description: obj.Description, Owner: obj.Owner } as ApiKey
       });
-  
-      console.log(apiKeys);
-  
+    
       return apiKeys;
     }
   

@@ -7,6 +7,10 @@ export class CcloudAccessControlLists implements AccessControlLists {
         let result = await executeCli(["kafka", "acl", "list", "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID]);
         let resultObjects = parse(result) as AccessControlList[];
 
+        resultObjects.forEach(elem => {
+            elem.ServiceAccountId = elem.ServiceAccountId.split(':')[1];
+        });
+
         return resultObjects;
     }
 
@@ -61,7 +65,7 @@ export class CcloudAccessControlLists implements AccessControlLists {
         let command = [
             "kafka", "acl", createOrDelete,
             "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID,
-            "--service-account-id", serviceAccountId + "",
+            "--service-account", serviceAccountId + "",
             "--operation", operation
         ];
 
