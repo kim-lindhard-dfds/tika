@@ -18,7 +18,7 @@ export class ServiceAccountAlreadyExistsException extends Error {
   constructor(args: any = null) {
     super(args);
     this.name = "CcloudServiceAccountAlreadyExists";
-    this.message = "A Service account with the given name already exists";
+    this.message = "A Service account with the given name, but different description already exists";
   }
 }
 
