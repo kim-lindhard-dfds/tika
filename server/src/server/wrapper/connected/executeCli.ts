@@ -42,5 +42,5 @@ function cliErrHandler(exitCode: number, lines: string[], reject: any) {
 
 
 function toB64(value: string): string {
-  return new Buffer(value, "binary").toString("base64");
+  return Buffer.from(value, "binary").toString("base64");
 }
