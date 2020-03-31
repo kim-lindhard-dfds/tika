@@ -21,7 +21,11 @@ export class NotConnectedServiceAccounts implements ServiceAccounts {
 
     async createServiceAccount(name: string, description: string): Promise<ServiceAccount> {
 
-        if (this.serviceAccounts.some(e => e.Name === name)) {
+        var existingAccount = this.serviceAccounts.find(e => e.Name === name);
+        if (existingAccount !== undefined) {
+            if (existingAccount.Description === description) {
+                return existingAccount;
+            }
             throw new ServiceAccountAlreadyExistsException();
         }
         
