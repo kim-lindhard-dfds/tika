@@ -16,23 +16,17 @@ export function executeCli(args: string[]): Promise<string[]> {
     errReader.on("line", data => errLines.push((data as any).toString("utf8")));
 
     runner.on("exit", exitCode => {
-      if (exitCode.toString() != "0") {
-        console.log(errLines);
-
-        let cliErrResult = cliErrHandler(exitCode, errLines, reject);
-
-        if (!cliErrResult) {
-          reject(exitCode.toString());  
-        }
-      } else {
+      if (exitCode.toString() == "0") {
         resolve(lines);
       }
+
+      cliErrHandler(exitCode, errLines, reject);
     });
   });
 }
 
 
-function cliErrHandler(exitCode: number, lines: string[], reject : any): boolean {
+function cliErrHandler(exitCode: number, lines: string[], reject: any) {
   let b64_line: string = toB64(lines[0]);
   if (
     b64_line.valueOf() ===
@@ -44,8 +38,6 @@ function cliErrHandler(exitCode: number, lines: string[], reject : any): boolean
   }
 
   reject(new CliException(exitCode, lines));
-
-  return true;
 }
 
 
