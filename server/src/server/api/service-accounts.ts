@@ -8,7 +8,7 @@ export class ServiceAccountsInterface {
         app.post('/service-accounts', async function (req: Request, res: Response) {
             console.log('post /service-accounts');
 
-            try {
+        try {
             let newServiceAccount = await serviceAccounts.createServiceAccount(
                 req.body.name,
                 req.body.description
