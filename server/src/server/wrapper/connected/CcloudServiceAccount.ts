@@ -1,6 +1,6 @@
 import { parse, parseSideColumns } from "./../parser";
 import { executeCli } from "./executeCli";
-import { CliException } from "./../model/error";
+import { CliException, ServiceAccountAlreadyExistsException } from "./../model/error";
 
 export class CcloudServiceAccount implements ServiceAccounts {
   ccloud: CCloudCliWrapper;
@@ -13,18 +13,14 @@ export class CcloudServiceAccount implements ServiceAccounts {
   }
 
   async createServiceAccount(accountName: string, description: string = ""): Promise<ServiceAccount> {
-
-
     let cliResult;
     try {
       cliResult = await executeCli(["service-account", "create", accountName, "--description", description]);
-
     }
     catch (err) {
-
       if (err instanceof CliException) {
-        console.log("Caught a CliException");
         if (err.consoleLines.some((l: string): boolean => l.includes("Service name is already in use"))){
+          throw new ServiceAccountAlreadyExistsException();
           // Get the service account with the same name
           // check if description is the same
           // if the description is the same then return that service account

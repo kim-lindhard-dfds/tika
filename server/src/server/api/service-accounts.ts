@@ -17,6 +17,7 @@ export class ServiceAccountsInterface {
         }
         catch (err) {
             console.log(err);
+            console.log("ServiceAccountsInterface handling err");
             if (err.name.valueOf() === new ServiceAccountAlreadyExistsException().name.valueOf()) {
                 res.status(409).json({errName: err.name, errMessage: err.message});
             } else {

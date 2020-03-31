@@ -18,8 +18,12 @@ export function executeCli(args: string[]): Promise<string[]> {
     runner.on("exit", exitCode => {
       if (exitCode.toString() != "0") {
         console.log(errLines);
-        cliErrHandler(exitCode, errLines);
-        reject(exitCode.toString());
+
+        let cliErrResult = cliErrHandler(exitCode, errLines, reject);
+
+        if (!cliErrResult) {
+          reject(exitCode.toString());  
+        }
       } else {
         resolve(lines);
       }
@@ -28,7 +32,7 @@ export function executeCli(args: string[]): Promise<string[]> {
 }
 
 
-function cliErrHandler(exitCode: number, lines: string[]): boolean {
+function cliErrHandler(exitCode: number, lines: string[], reject : any): boolean {
   let b64_line: string = toB64(lines[0]);
   if (
     b64_line.valueOf() ===
@@ -36,9 +40,12 @@ function cliErrHandler(exitCode: number, lines: string[]): boolean {
     || b64_line.valueOf() ===
     "RXJyb3I6IFlvdSBtdXN0IGxvZ2luIHRvIHJ1biB0aGF0IGNvbW1hbmQu".valueOf()
   ) {
-    throw new CcloudSessionExpiredException();
+    reject(new CcloudSessionExpiredException());
   }
-  throw new CliException(exitCode, lines);
+
+  reject(new CliException(exitCode, lines));
+
+  return true;
 }
 
 
