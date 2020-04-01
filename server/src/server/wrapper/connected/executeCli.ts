@@ -6,8 +6,8 @@ export function executeCli(args: string[]): Promise<string[]> {
   const cli = process.env.TIKA_CCLOUD_BIN_PATH ?? "ccloud";
 
   return new Promise((resolve, reject) => {
-    const lines = new Array();
-    const errLines = new Array();
+    const lines: Array<string> = [];
+    const errLines: Array<string> = [];
     const runner = spawn(cli, args);
     const reader = readline.createInterface({ input: runner.stdout });
     const errReader = readline.createInterface({ input: runner.stderr });
@@ -16,31 +16,16 @@ export function executeCli(args: string[]): Promise<string[]> {
     errReader.on("line", data => errLines.push((data as any).toString("utf8")));
 
     runner.on("exit", exitCode => {
+
       if (exitCode.toString() == "0") {
-        resolve(lines);
+        return resolve(lines);
       }
 
-      cliErrHandler(exitCode, errLines, reject);
+      if (errLines.some((l: string): boolean => l.includes("You must log in to run that command."))) {
+        return reject(new CcloudSessionExpiredException());
+      }
+
+      reject(new CliException(exitCode, errLines));
     });
   });
-}
-
-
-function cliErrHandler(exitCode: number, lines: string[], reject: any) {
-  let b64_line: string = toB64(lines[0]);
-  if (
-    b64_line.valueOf() ===
-    "RXJyb3I6IFlvdXIgc2Vzc2lvbiBoYXMgZXhwaXJlZC4gUGxlYXNlIGxvZ2luIGFnYWluLg==".valueOf()
-    || b64_line.valueOf() ===
-    "RXJyb3I6IFlvdSBtdXN0IGxvZ2luIHRvIHJ1biB0aGF0IGNvbW1hbmQu".valueOf()
-  ) {
-    reject(new CcloudSessionExpiredException());
-  }
-
-  reject(new CliException(exitCode, lines));
-}
-
-
-function toB64(value: string): string {
-  return Buffer.from(value, "binary").toString("base64");
 }
