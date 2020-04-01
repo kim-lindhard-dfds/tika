@@ -31,6 +31,6 @@ export class CliException extends Error {
     this.exitCode = exitCode;
     this.consoleLines = consoleLines;
     this.name = "CliException";
-    this.message = "A Service account with the given name already exists";
+    this.message = "CCloud cli exited with a not ok status code";
   }
 }
