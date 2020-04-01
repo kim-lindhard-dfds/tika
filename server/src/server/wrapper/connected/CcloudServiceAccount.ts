@@ -17,24 +17,25 @@ export class CcloudServiceAccount implements ServiceAccounts {
     try {
       cliResult = await executeCli(["service-account", "create", accountName, "--description", description]);
     }
-    catch (err) {
-      if (err.name.valueOf() === "CliException") {
-        if (err.consoleLines.some((l: string): boolean => l.includes("Service name is already in use"))) {
-         let existingServicesAccounts = await this.getServiceAccounts();
+    catch (error) {
+      if (error.name.valueOf() !== "CliException") {
+        throw (error);
+      }
 
-          let existingServicesAccount = existingServicesAccounts.find(s => s.Name === accountName);
+      if (error.consoleLines.some((l: string): boolean => l.includes("Service name is already in use"))) {
+        let existingServicesAccounts = await this.getServiceAccounts();
 
-          let isTheSame = existingServicesAccount.Description === description;
+        let existingServicesAccount = existingServicesAccounts.find(s => s.Name === accountName);
 
-          if (isTheSame) {
-            return existingServicesAccount;
-          }
+        let isTheSame = existingServicesAccount.Description === description;
 
-         throw new ServiceAccountAlreadyExistsException();
+        if (isTheSame) {
+          return existingServicesAccount;
         }
+
+        throw new ServiceAccountAlreadyExistsException();
       }
     }
-
 
     let result = parseSideColumns(cliResult);
 
