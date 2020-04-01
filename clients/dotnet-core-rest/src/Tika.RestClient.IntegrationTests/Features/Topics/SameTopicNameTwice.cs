@@ -30,11 +30,10 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private async Task And_a_single_topic()
         {
             _topicName = "Integration-test-" + Guid.NewGuid();
-            var topicCreate = new TopicCreate
-            {
-                name = _topicName,
-                partitionCount = 1
-            };
+            var topicCreate = TopicCreate.Create(
+                name: _topicName,
+                partitionCount: 1
+            );
 
             await _client.Topics.CreateAsync(topicCreate);
         }
@@ -44,12 +43,12 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         {
             try
             {
-                var topicCreate = new TopicCreate
-                {
-                    name = _topicName,
-                    partitionCount = 1
-                };
-
+                var topicCreate = TopicCreate.Create(
+                    name: _topicName,
+                    partitionCount: 1
+                );
+                
+                
                 await _client.Topics.CreateAsync(topicCreate);
             }
             catch (TopicAlreadyExistsException e)

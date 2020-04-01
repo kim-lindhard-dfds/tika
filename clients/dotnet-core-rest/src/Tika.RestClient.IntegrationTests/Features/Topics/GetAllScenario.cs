@@ -32,11 +32,10 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private async Task And_a_single_topic()
         {
             using var client = LocalhostRestClient.Create();
-            _topicCreate = new TopicCreate
-            {
-                name = Guid.NewGuid().ToString(), 
-                partitionCount = 1
-            };
+            _topicCreate = TopicCreate.Create(
+                name: Guid.NewGuid().ToString(),
+                partitionCount: 1
+            );
             
             await client.Topics.CreateAsync(_topicCreate);
         }
