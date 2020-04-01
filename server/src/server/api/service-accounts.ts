@@ -7,19 +7,20 @@ export class ServiceAccountsInterface {
 
         app.post('/service-accounts', async function (req: Request, res: Response) {
             console.log('post /service-accounts');
-        try {
-            let newServiceAccount = await serviceAccounts.createServiceAccount(
-                req.body.name,
-                req.body.description
-            );
-            return res.json(newServiceAccount);
-        }
-        catch (err) {
-            if (err.name.valueOf() === new ServiceAccountAlreadyExistsException().name.valueOf()) {
-                return res.status(409).json({errName: err.name, errMessage: err.message});
+            try {
+                let newServiceAccount = await serviceAccounts.createServiceAccount(
+                    req.body.name,
+                    req.body.description
+                );
+                return res.json(newServiceAccount);
             }
-            return  res.status(500).json({errName: err.name, errMessage: err.message});
-        }
+            catch (err) {
+                console.error(err);
+                if (err.name.valueOf() === new ServiceAccountAlreadyExistsException().name.valueOf()) {
+                    return res.status(409).json({ errName: err.name, errMessage: err.message });
+                }
+                return res.status(500).json({ errName: err.name, errMessage: err.message });
+            }
         });
 
         app.get('/service-accounts', async function (req: Request, res: Response) {
