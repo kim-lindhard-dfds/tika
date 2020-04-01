@@ -107,7 +107,6 @@ function parseSideColumns(input: ParseInput): any[] {
         columnValue = columnValue.slice(0, columnValue.length - spaceCounted);
       }
 
-      //console.log(i, rawEntry);
       payload[columnName] = columnValue;
     }
 
