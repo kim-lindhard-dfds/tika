@@ -7,13 +7,11 @@ export class TopicsInterface {
     public configureApp(topic: Topics, app: Application) {
 
         app.get('/topics', async function (req: Request, res: Response) {
-            console.log('get /topics');
 
             res.json(await topic.getTopics());
         });
 
         app.post('/topics', async function (req: Request, res: Response) {
-            console.log('post /topics');
             let good : boolean = true;
 
             try {
@@ -40,7 +38,6 @@ export class TopicsInterface {
         });
 
         app.delete('/topics/:name', async function (req: Request, res: Response) {
-            console.log('delete /topics/' + req.params.name);
 
             await topic.deleteTopic(
                 req.params.name,

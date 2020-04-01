@@ -2,13 +2,14 @@ import {ServiceAccountsInterface} from "./api/service-accounts";
 import {ApiKeysInterface} from "./api/api-keys";
 import {AccessControlListsInterface} from "./api/AccessControlListsInterface";
 import {TopicsInterface} from "./api/TopicsInterface";
-
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
+import {RequestLogger} from "./api/middleware/requestLoggerMiddleware";
 const express = require("express");
 
 const app = express();
 app.use(express.json());
+app.use(RequestLogger);
 
 var cc: CCloudCliWrapper;
 
