@@ -15,7 +15,7 @@ var cc: CCloudCliWrapper;
 
 const apiImplementationToUse = process.env.TIKA_API_IMPLEMENTATION || "connected";
 
-console.log("Using api implementation:", apiImplementationToUse);
+console.info("Using api implementation:", apiImplementationToUse);
 switch (apiImplementationToUse.valueOf()) {
     case "notconnected".valueOf():
         cc = new NotConnectedCCloudCliWrapper();
@@ -59,5 +59,5 @@ topicsInterface.configureApp(
 const port = process.env.port || 3000;
 
 app.listen(port, () => {
-    console.log(`tika is listening on port ${port}...`);
+    console.info(`tika is listening on port ${port}...`);
 });

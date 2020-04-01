@@ -21,7 +21,7 @@ export class TopicsInterface {
                 );
             }
             catch (err) {
-                console.log(err);
+                console.error(err);
                 if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
                     res.status(409).json({errName: err.name, errMessage: err.message});
                 } else {
