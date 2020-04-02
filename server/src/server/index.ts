@@ -2,19 +2,20 @@ import {ServiceAccountsInterface} from "./api/service-accounts";
 import {ApiKeysInterface} from "./api/api-keys";
 import {AccessControlListsInterface} from "./api/AccessControlListsInterface";
 import {TopicsInterface} from "./api/TopicsInterface";
-
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
+import {RequestLogger} from "./api/middleware/requestLoggerMiddleware";
 const express = require("express");
 
 const app = express();
 app.use(express.json());
+app.use(RequestLogger);
 
 var cc: CCloudCliWrapper;
 
 const apiImplementationToUse = process.env.TIKA_API_IMPLEMENTATION || "connected";
 
-console.log("Using api implementation:", apiImplementationToUse);
+console.info("Using api implementation:", apiImplementationToUse);
 switch (apiImplementationToUse.valueOf()) {
     case "notconnected".valueOf():
         cc = new NotConnectedCCloudCliWrapper();
@@ -58,5 +59,5 @@ topicsInterface.configureApp(
 const port = process.env.port || 3000;
 
 app.listen(port, () => {
-    console.log(`tika is listening on port ${port}...`);
+    console.info(`tika is listening on port ${port}...`);
 });

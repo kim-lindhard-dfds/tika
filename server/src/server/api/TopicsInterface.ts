@@ -6,7 +6,6 @@ export class TopicsInterface {
     public configureApp(topics: Topics, app: Application) {
 
         app.get('/topics', async function (req: Request, res: Response) {
-            console.log('get /topics');
 
             res.json(await topics.getTopics());
         });
@@ -18,16 +17,15 @@ export class TopicsInterface {
         });
 
         app.post('/topics', async function (req: Request, res: Response) {
-            console.log('post /topics');
-            let good: boolean = true;
 
             const topic = req.body as Topic;
+            let good : boolean = true;
 
             try {
                 await topics.createTopic(topic);
             }
             catch (err) {
-                console.log(err);
+                console.error(err);
                 if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
                     res.status(409).json({ errName: err.name, errMessage: err.message });
                 } else {
@@ -44,7 +42,6 @@ export class TopicsInterface {
         });
 
         app.delete('/topics/:name', async function (req: Request, res: Response) {
-            console.log('delete /topics/' + req.params.name);
 
             await topics.deleteTopic(
                 req.params.name,
