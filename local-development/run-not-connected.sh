@@ -1,2 +1,2 @@
 TIKA_API_IMPLEMENTATION=notconnected \
-npm run start --prefix ../server
+npm run dev --prefix ../server
