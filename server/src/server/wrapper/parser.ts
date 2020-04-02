@@ -145,7 +145,6 @@ function parseTopicDescription(lines: ParseInput): Topic {
   let topic: Topic =
   {
     Name: match.groups.topic,
-    Description: "",
     PartitionCount: Number(match.groups.partitionCount),
     Configurations: configurationsAsMap
   };

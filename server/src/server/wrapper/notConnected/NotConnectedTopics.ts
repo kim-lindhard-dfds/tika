@@ -39,10 +39,15 @@ export class NotConnectedTopics implements Topics {
         return new Promise((resolve, reject) => {
             const existingTopic = this.topics.find(t => t.Name === topic.Name);
             if (existingTopic !== undefined) {
-                if (existingTopic.Description != topic.Description) {
-                    return reject(new TopicAlreadyExistsException());
-                }
 
+                Object
+                .keys(topic.Configurations)
+                .forEach(function (key){
+                    if (existingTopic.Configurations[key] != topic.Configurations[key]) {
+                        return reject(new TopicAlreadyExistsException());
+                    }
+                });
+              
                 return resolve();
             }
             this.topics.push(topic);

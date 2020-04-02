@@ -1,6 +1,5 @@
 type Topic = {
     Name: string;
-    Description: string;
     PartitionCount: number;
     Configurations: {[key: string]: any}
 }
