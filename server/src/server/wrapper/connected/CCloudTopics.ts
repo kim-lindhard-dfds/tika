@@ -1,6 +1,6 @@
-import { parse } from "./../parser";
+import { parse, parseTopicDescription } from "./../parser";
 import { executeCli } from "./executeCli";
-import {TopicAlreadyExistsException} from "../model/error";
+import { TopicAlreadyExistsException } from "../model/error";
 
 
 export class CcloudTopics implements Topics {
@@ -16,8 +16,12 @@ export class CcloudTopics implements Topics {
         return result;
     }
 
-    describeTopic(name: string): Promise<Topic> {
-        throw new Error("Method not implemented.");
+    async describeTopic(name: string): Promise<Topic> {
+        let consoleLines = await executeCli(["kafka", "topic", "describe", name, "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID]);
+
+        var topic = parseTopicDescription(consoleLines);
+
+        return topic;
     }
 
     async createTopic(topic: Topic): Promise<void> {
