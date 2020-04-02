@@ -6,6 +6,14 @@ GET http://localhost:3000/topics
 
 ###
 
+###
+
+# Describe a topic
+
+GET http://localhost:3000/topics/devx
+
+###
+
 # Add topic
 POST http://localhost:3000/topics
 content-type: application/json
