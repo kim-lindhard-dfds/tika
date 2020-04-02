@@ -16,15 +16,19 @@ export class CcloudTopics implements Topics {
         return result;
     }
 
-    async createTopic(name: string, partitionCount: number): Promise<void> {
-        let topics = await this.getTopics();
+    describeTopic(name: string): Promise<Topic> {
+        throw new Error("Method not implemented.");
+    }
 
-        let topicFound = topics.find(v => v.valueOf() === name.valueOf());
+    async createTopic(topic: Topic): Promise<void> {
+        let topicNames = await this.getTopics();
+
+        let topicFound = topicNames.find(topicName => topicName.valueOf() === topic.Name.valueOf());
         if (topicFound === undefined) {
             await executeCli([
                 "kafka", "topic",
-                "create", name,
-                "--partitions", partitionCount + "",
+                "create", topic.Name,
+                "--partitions", topic.PartitionCount + "",
                 "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
             ]);
         } else {

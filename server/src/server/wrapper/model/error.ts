@@ -13,3 +13,12 @@ export class TopicAlreadyExistsException extends Error  {
     this.message = "A Topic with the given name already exists";
   }
 }
+
+export class NoTopicFoundException extends Error  {
+  constructor(topicName: string) {
+    super(null);
+    this.name = "NoTopicFoundException";
+    this.message = "A Topic with the name: '"+ topicName + "' could not be found";
+  }
+}
+
