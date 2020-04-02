@@ -6,9 +6,12 @@ import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedC
 import {Ccloud} from "./wrapper/ccloud";
 import {RequestLogger} from "./api/middleware/requestLoggerMiddleware";
 import { RequestError } from "./api/middleware/requestErrorMiddleware";
+import { ResponseLogger } from "./api/middleware/responseLoggerMiddleware";
 const express = require("express");
+const setCorrelationId = require('express-mw-correlation-id');
 
 const app = express();
+app.use(setCorrelationId());
 app.use(express.json());
 app.use(RequestLogger);
 
@@ -57,6 +60,7 @@ topicsInterface.configureApp(
 );
 
 app.use(RequestError);
+app.use(ResponseLogger);
 
 
 const port = process.env.port || 3000;

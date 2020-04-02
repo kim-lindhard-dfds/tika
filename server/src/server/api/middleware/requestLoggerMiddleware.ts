@@ -6,7 +6,8 @@ export const RequestLogger = (
   next: NextFunction
 ) => {
 
-  console.info(`${request.method} ${request.path}`);
+  // 4/2/2020, 10:39:06 AM: [1347a8a782381] Request GET - /
+  console.info(`${new Date().toLocaleString()}: [${(request as any).id}] Request ${request.method} - ${request.path}`);
   
   next();
 };
