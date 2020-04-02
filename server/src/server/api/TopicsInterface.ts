@@ -1,4 +1,4 @@
-import { Request, Response, Application } from 'express'
+import { Request, Response, Application, NextFunction } from 'express'
 import {TopicAlreadyExistsException} from "../wrapper/model/error";
 import { transcode } from 'buffer';
 
@@ -6,12 +6,17 @@ export class TopicsInterface {
 
     public configureApp(topic: Topics, app: Application) {
 
-        app.get('/topics', async function (req: Request, res: Response) {
+        app.get('/topics', async function (req: Request, res: Response, next : NextFunction) {
 
-            res.json(await topic.getTopics());
+            try {
+                res.json(await topic.getTopics());
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.post('/topics', async function (req: Request, res: Response) {
+        app.post('/topics', async function (req: Request, res: Response, next : NextFunction) {
             let good : boolean = true;
 
             try {
@@ -21,13 +26,7 @@ export class TopicsInterface {
                 );
             }
             catch (err) {
-                console.error(err);
-                if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
-                    res.status(409).json({errName: err.name, errMessage: err.message});
-                } else {
-                    res.status(500).json({errName: err.name, errMessage: err.message});
-                }
-
+                next(err);
                 good = false;
             }
 
@@ -37,13 +36,18 @@ export class TopicsInterface {
             }
         });
 
-        app.delete('/topics/:name', async function (req: Request, res: Response) {
-
-            await topic.deleteTopic(
-                req.params.name,
-            );
-
-            res.sendStatus(200);
+        app.delete('/topics/:name', async function (req: Request, res: Response, next : NextFunction) {
+            
+            try {
+                await topic.deleteTopic(
+                    req.params.name,
+                );
+    
+                res.sendStatus(200);
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
 }

@@ -1,11 +1,12 @@
-import { Request, Response, Application } from 'express'
+import { Request, Response, Application, NextFunction } from 'express'
 import { ServiceAccountAlreadyExistsException } from "./../wrapper/model/error";
 
 export class ServiceAccountsInterface {
 
     public configureApp(serviceAccounts: ServiceAccounts, app: Application) {
 
-        app.post('/service-accounts', async function (req: Request, res: Response) {
+        app.post('/service-accounts', async function (req: Request, res: Response, next : NextFunction) {
+
             try {
                 let newServiceAccount = await serviceAccounts.createServiceAccount(
                     req.body.name,
@@ -14,24 +15,30 @@ export class ServiceAccountsInterface {
                 return res.json(newServiceAccount);
             }
             catch (err) {
-                console.error(err);
-                if (err.name.valueOf() === new ServiceAccountAlreadyExistsException().name.valueOf()) {
-                    return res.status(409).json({ errName: err.name, errMessage: err.message });
-                }
-                return res.status(500).json({ errName: err.name, errMessage: err.message });
+                next(err);
             }
         });
 
-        app.get('/service-accounts', async function (req: Request, res: Response) {
+        app.get('/service-accounts', async function (req: Request, res: Response, next : NextFunction) {
 
-            res.json(await serviceAccounts.getServiceAccounts());
+            try {
+                res.json(await serviceAccounts.getServiceAccounts());
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.delete('/service-accounts/:id', async function (req: Request, res: Response) {
+        app.delete('/service-accounts/:id', async function (req: Request, res: Response, next : NextFunction) {
 
-            await serviceAccounts.deleteServiceAccount(parseInt(req.params.id));
+            try {
+                await serviceAccounts.deleteServiceAccount(parseInt(req.params.id));
 
-            res.sendStatus(200);
+                res.sendStatus(200);    
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
 }

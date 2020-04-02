@@ -1,9 +1,9 @@
-import { Request, Response, Application } from 'express'
+import { Request, Response, Application, NextFunction } from 'express'
 
 export class AccessControlListsInterface {
     public configureApp(accessControlLists: AccessControlLists, app: Application) {
         
-        app.post('/access-control-lists', async function (req: Request, res: Response) {
+        app.post('/access-control-lists', async function (req: Request, res: Response, next : NextFunction) {
 
             try {
                 await accessControlLists.createAccessControlList(
@@ -13,29 +13,39 @@ export class AccessControlListsInterface {
                     req.body.topicPrefix,
                     req.body.consumerGroupPrefix
                 );
+
+                res.sendStatus(200);
             }
             catch (err) {
-                res.status(500).json({errName: err.name, errMessage: err.message});
+                next(err);
             }
-
-            res.sendStatus(200);
         });
 
-        app.post('/access-control-lists/delete', async function (req: Request, res: Response) {
+        app.post('/access-control-lists/delete', async function (req: Request, res: Response, next : NextFunction) {
 
-            await accessControlLists.deleteAccessControlList(
-                req.body.serviceAccountId as number,
-                req.body.allow as boolean,
-                req.body.operation,
-                req.body.topicPrefix,
-                req.body.consumerGroupPrefix
-            );
-            res.sendStatus(200);
+            try {
+                await accessControlLists.deleteAccessControlList(
+                    req.body.serviceAccountId as number,
+                    req.body.allow as boolean,
+                    req.body.operation,
+                    req.body.topicPrefix,
+                    req.body.consumerGroupPrefix
+                );
+                res.sendStatus(200);
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.get('/access-control-lists', async function (req: Request, res: Response) {
+        app.get('/access-control-lists', async function (req: Request, res: Response, next : NextFunction) {
 
-            res.json(await accessControlLists.getAccessControlLists());
+            try {
+                res.json(await accessControlLists.getAccessControlLists());
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
 }

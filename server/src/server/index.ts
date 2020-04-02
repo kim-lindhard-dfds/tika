@@ -5,6 +5,7 @@ import {TopicsInterface} from "./api/TopicsInterface";
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
 import {RequestLogger} from "./api/middleware/requestLoggerMiddleware";
+import { RequestError } from "./api/middleware/requestErrorMiddleware";
 const express = require("express");
 
 const app = express();
@@ -54,6 +55,8 @@ topicsInterface.configureApp(
     cc.Kafka.Topics,
     app
 );
+
+app.use(RequestError);
 
 
 const port = process.env.port || 3000;
