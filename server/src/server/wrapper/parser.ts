@@ -21,7 +21,7 @@ function parse(rows: ParseInput): any[] {
     let processedRow: string[] = [];
     for (var currentColumnIndex = 0; currentColumnIndex < currentRawColumns.length; currentColumnIndex++) {
       let scrubbedColumn = currentRawColumns[currentColumnIndex].trimLeft().trimRight();
-      
+
       if (currentColumnIndex !== descriptionIndex) {
         processedRow[currentColumnIndex] = scrubbedColumn;
         continue;
@@ -116,4 +116,41 @@ function parseSideColumns(input: ParseInput): any[] {
   }
 }
 
-export { parse, parseSideColumns };
+function parseTopicDescription(lines: ParseInput): Topic {
+  const topicAndPartitionCountLine = lines[0];
+  const topicAndPartitionCountExpression = /Topic: (?<topic>.*?) PartitionCount: (?<partitionCount>.*?) /gm;
+
+  let match = topicAndPartitionCountExpression.exec(topicAndPartitionCountLine);
+
+  const configurationsTableLines = lines.splice(lines.indexOf("Configuration") + 2);
+  const configurationsAsObjects = parse(configurationsTableLines);
+  const configurationsAsMap: { [key: string]: any } = {};
+
+  configurationsAsObjects.forEach(configurationObject => {
+    let value: any = null;
+
+    if (isNaN(configurationObject.Value) === false) {
+      value = Number(configurationObject.Value)
+    } else if (["true", "false"].includes(configurationObject.Value.toLowerCase())) {
+      value = Boolean(configurationObject.Value);
+    } else {
+      value = String(configurationObject.Value);
+    }
+
+    configurationsAsMap[configurationObject.Name] = value;
+
+  });
+
+
+  let topic: Topic =
+  {
+    Name: match.groups.topic,
+    Description: "",
+    PartitionCount: Number(match.groups.partitionCount),
+    Configurations: configurationsAsMap
+  };
+
+  return topic;
+}
+
+export { parse, parseSideColumns, parseTopicDescription };
