@@ -11,7 +11,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private IRestClient _client;
         private string _topicName;
         private TimeSpan _messageRetentionPeriod;
-        private double _maxDiskUsageInMb;
+        private Int64 _maxDiskUsageInMb;
 
         private TopicDescription _returnedTopicDescription;
 
@@ -55,12 +55,12 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
         private void Then_the_configurations_are_the_same()
         {
-            var returnedMessageRetentionPeriodInMs = (double)_returnedTopicDescription.configurations["retention.ms"];
+            var returnedMessageRetentionPeriodInMs = (Int64)_returnedTopicDescription.configurations["retention.ms"];
             var returnedMessageRetentionPeriod = TimeSpan.FromMilliseconds(returnedMessageRetentionPeriodInMs);
 
             var returnedMaxDiskUsageInBytes =
-                (double) _returnedTopicDescription.configurations["retention.bytes"];
-            var returnedMaxDiskUsageInMb = returnedMaxDiskUsageInBytes * 1000;
+                (Int64) _returnedTopicDescription.configurations["retention.bytes"];
+            var returnedMaxDiskUsageInMb = returnedMaxDiskUsageInBytes / 1000000;
             
             Assert.Equal(_messageRetentionPeriod, returnedMessageRetentionPeriod);
             Assert.Equal(_maxDiskUsageInMb, returnedMaxDiskUsageInMb);

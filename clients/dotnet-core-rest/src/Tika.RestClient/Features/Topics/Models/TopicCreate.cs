@@ -5,10 +5,10 @@ namespace Tika.RestClient.Features.Topics.Models
 {
     public class TopicCreate
     {
-        public string name { get; set; }
-        public int partitionCount { get; set; }
+        public string Name { get; set; }
+        public int PartitionCount { get; set; }
 
-        public Dictionary<string, object> configurations { get; set; }
+        public Dictionary<string, object> Configurations { get; set; }
 
         
         private TopicCreate(){}
@@ -36,9 +36,9 @@ namespace Tika.RestClient.Features.Topics.Models
         {
             var topicCrete = new TopicCreate
             {
-                name = name,
-                partitionCount = partitionCount,
-                configurations = new Dictionary<string, object>
+                Name = name,
+                PartitionCount = partitionCount,
+                Configurations = new Dictionary<string, object>
                 {
                     {"retention.ms", messageRetentionPeriod.TotalMilliseconds},
                     {"retention.bytes", maxDiskUsageInMb * 1000000}
@@ -55,9 +55,9 @@ namespace Tika.RestClient.Features.Topics.Models
         {
             var topicCrete = new TopicCreate
             {
-                name = name,
-                partitionCount = partitionCount,
-                configurations = new Dictionary<string, object>()
+                Name = name,
+                PartitionCount = partitionCount,
+                Configurations = new Dictionary<string, object>()
             };
 
             return topicCrete;

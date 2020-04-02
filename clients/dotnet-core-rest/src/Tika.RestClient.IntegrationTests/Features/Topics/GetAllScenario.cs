@@ -47,7 +47,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
         private void Then_the_topic_is_returned()
         {
-            _returnedTopics.Single(t => t == _topicCreate.name);
+            _returnedTopics.Single(t => t == _topicCreate.Name);
         }
     }
 }

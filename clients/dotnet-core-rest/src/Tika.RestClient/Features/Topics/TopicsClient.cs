@@ -70,7 +70,7 @@ namespace Tika.RestClient.Features.Topics
         public async Task<TopicDescription> DescribeAsync(string topicName)
         {
             var httpResponseMessage = await _httpClient.GetAsync(
-                new Uri(TOPICS_ROUTE + "/" + topicName + "/describe", UriKind.Relative)
+                new Uri(TOPICS_ROUTE + "/" + topicName, UriKind.Relative)
             );
             
             var topicDescription = await Utilities.Parse<TopicDescription>(httpResponseMessage);
