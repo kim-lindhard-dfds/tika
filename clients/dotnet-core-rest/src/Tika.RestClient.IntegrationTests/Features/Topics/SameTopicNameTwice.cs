@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Tika.RestClient.IntegrationTests.Features.Topics
 {
-    public class SameTopicNameTwice
+    public class SameTopicNameTwice : IDisposable
     {
         private IRestClient _client;
         private string _topicName;
@@ -61,6 +61,12 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private void Then_a_TopicAlreadyExistsException_is_thrown()
         {
             Assert.NotNull(_topicAlreadyExistsException);
+        }
+
+        public void Dispose()
+        {
+            var task = _client.Topics.DeleteAsync(_topicName);
+            task.Wait();
         }
     }
 }
