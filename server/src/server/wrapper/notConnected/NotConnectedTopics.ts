@@ -37,19 +37,21 @@ export class NotConnectedTopics implements Topics {
 
     async createTopic(topic: Topic): Promise<void> {
         return new Promise((resolve, reject) => {
+        
             const existingTopic = this.topics.find(t => t.Name === topic.Name);
             if (existingTopic !== undefined) {
 
                 Object
-                .keys(topic.Configurations)
-                .forEach(function (key){
-                    if (existingTopic.Configurations[key] != topic.Configurations[key]) {
-                        return reject(new TopicAlreadyExistsException());
-                    }
-                });
-              
+                    .keys(topic.Configurations)
+                    .forEach(function (key) {
+                        if (existingTopic.Configurations[key] != topic.Configurations[key]) {
+                            return reject(new TopicAlreadyExistsException());
+                        }
+                    });
+
                 return resolve();
             }
+
             this.topics.push(topic);
             return resolve();
         });
