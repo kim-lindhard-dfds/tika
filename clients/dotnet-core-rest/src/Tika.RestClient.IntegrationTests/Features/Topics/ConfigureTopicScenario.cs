@@ -11,7 +11,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private IRestClient _client;
         private string _topicName;
         private TimeSpan _messageRetentionPeriod;
-        private Int64 _maxDiskUsageInMb;
+        private Int64 _maxDiskUsageInBytes;
 
         private TopicDescription _returnedTopicDescription;
 
@@ -35,14 +35,14 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
             var random = new Random();
 
             _messageRetentionPeriod = TimeSpan.FromDays(random.Next(1, 7));
-            _maxDiskUsageInMb = random.Next(1, 2001);
+            _maxDiskUsageInBytes = random.Next(1, 2001) * 1000000;
 
-            var topicCreate = TopicCreate.CreateWithRetention(
-                name: _topicName,
-                partitionCount: 1,
-                messageRetentionPeriod: _messageRetentionPeriod,
-                _maxDiskUsageInMb
-            );
+            var topicCreate = TopicCreate
+                    .Create(
+                        name: _topicName,
+                        partitionCount: 1)
+                    .WithConfiguration("retention.ms", _messageRetentionPeriod.TotalMilliseconds)
+                    .WithConfiguration("retention.bytes", _maxDiskUsageInBytes);
 
             await _client.Topics.CreateAsync(topicCreate);
         }
@@ -59,10 +59,9 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
             var returnedMaxDiskUsageInBytes =
                 (Int64) _returnedTopicDescription.configurations["retention.bytes"];
-            var returnedMaxDiskUsageInMb = returnedMaxDiskUsageInBytes / 1000000;
 
             Assert.Equal(_messageRetentionPeriod, returnedMessageRetentionPeriod);
-            Assert.Equal(_maxDiskUsageInMb, returnedMaxDiskUsageInMb);
+            Assert.Equal(_maxDiskUsageInBytes, returnedMaxDiskUsageInBytes);
         }
 
         public void Dispose()
