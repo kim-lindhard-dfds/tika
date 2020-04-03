@@ -25,19 +25,46 @@ export class CcloudTopics implements Topics {
     }
 
     async createTopic(topic: Topic): Promise<void> {
-        let topicNames = await this.getTopics();
 
-        let topicFound = topicNames.find(topicName => topicName.valueOf() === topic.Name.valueOf());
-        if (topicFound === undefined) {
+        return await new Promise(async (resolve, reject) => {
+            let topicNames = await this.getTopics();
+
+            let topicFound = topicNames.find(topicName => topicName.valueOf() === topic.Name.valueOf());
+            if (topicFound !== undefined) {
+                reject(new TopicAlreadyExistsException());
+            }
+
+            if (topic.Configurations === undefined || topic.Configurations === null) {
+                await executeCli([
+                    "kafka", "topic",
+                    "create", topic.Name,
+                    "--partitions", topic.PartitionCount + "",
+                    "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
+                ]);
+
+                resolve();
+            }
+
+
+            var keyEqualValueStrings: string[] = [];
+
+            Object
+                .keys(topic.Configurations)
+                .forEach(function (key: string) {
+                    keyEqualValueStrings.push(key + "=" + topic.Configurations[key])
+                });
+            var configsString: string = keyEqualValueStrings.join(",");
+
             await executeCli([
                 "kafka", "topic",
                 "create", topic.Name,
                 "--partitions", topic.PartitionCount + "",
+                "--config", configsString,
                 "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
             ]);
-        } else {
-            throw new TopicAlreadyExistsException();
-        }
+
+            resolve();
+        });
     }
 
     async deleteTopic(name: string): Promise<void> {
