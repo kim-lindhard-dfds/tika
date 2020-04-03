@@ -11,7 +11,6 @@ export class TopicsInterface {
         });
 
         app.get('/topics/:name', async function (req: Request, res: Response) {
-            console.log('get /topics/' + req.params.name);
             var topic = await topics.describeTopic(req.params.name);
             res.json(topic);
         });
