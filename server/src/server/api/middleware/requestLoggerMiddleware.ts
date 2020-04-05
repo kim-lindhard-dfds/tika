@@ -7,7 +7,16 @@ export const RequestLogger = (
 ) => {
 
   // 4/2/2020, 10:39:06 AM: [1347a8a782381] Request GET - /
-  console.info(`${new Date().toLocaleString()}: [${(request as any).id}] Request ${request.method} - ${request.path}`);
+
+  let requestLogObject : any = {
+    timestamp: new Date().toUTCString(),
+    correlationId: (request as any).id,
+    action: "request",
+    method: request.method,
+    path: request.path
+  }
+
+  console.info(JSON.stringify(requestLogObject));
   
   next();
 };

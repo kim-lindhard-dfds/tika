@@ -7,7 +7,17 @@ export const ResponseLogger = (
 ) => {
 
   // 4/2/2020, 10:39:06 AM: [1347a8a782381] Response GET 200 - /
-  console.info(`${new Date().toLocaleString()}: [${(request as any).id}] Response ${request.method} ${response.statusCode} - ${request.path}`);
-  
+
+  let responseLogObject : any = {
+    timestamp: new Date().toUTCString(),
+    correlationId: (request as any).id,
+    action: "response",
+    method: request.method,
+    path: request.path,
+    statusCode: response.statusCode
+  }
+
+  console.info(JSON.stringify(responseLogObject));
+
   next();
 };
