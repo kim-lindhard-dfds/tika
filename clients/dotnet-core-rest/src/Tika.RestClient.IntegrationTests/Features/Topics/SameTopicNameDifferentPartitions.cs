@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tika.RestClient.Features.Topics.Exceptions;
 using Tika.RestClient.Features.Topics.Models;
@@ -8,24 +7,20 @@ using Xunit;
 
 namespace Tika.RestClient.IntegrationTests.Features.Topics
 {
-    public class SameTopicNameTwice : IDisposable
+    public class SameTopicNameDifferentPartitions : IDisposable
     {
         private IRestClient _client;
         private string _topicName;
         private TopicAlreadyExistsException _topicAlreadyExistsException;
-        private IEnumerable<string> _topicNames;
 
         [Fact]
-        public async Task SameTopicNameTwiceScenario()
+        public async Task SameTopicNameDifferentPartitionsScenario()
         {
                   Given_a_topic_client();
             await And_a_single_topic();
-            await When_a_topic_with_the_same_name_is_added();
-            await And_we_get_topic_names();
-                  Then_we_only_get_one_topic_with_our_name();
-                  
+            await When_a_topic_with_the_same_name_but_different_partitions_is_added();
+                  Then_a_TopicAlreadyExistsException_is_thrown();
         }
-
 
         private void Given_a_topic_client()
         {
@@ -44,24 +39,27 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         }
 
 
-        private async Task When_a_topic_with_the_same_name_is_added()
+        private async Task When_a_topic_with_the_same_name_but_different_partitions_is_added()
         {
-            var topicCreate = TopicCreate.Create(
-                name: _topicName,
-                partitionCount: 1
-            );
+            try
+            {
+                var topicCreate = TopicCreate.Create(
+                    name: _topicName,
+                    partitionCount: 2
+                );
                 
                 
-            await _client.Topics.CreateAsync(topicCreate);
+                await _client.Topics.CreateAsync(topicCreate);
+            }
+            catch (TopicAlreadyExistsException e)
+            {
+                _topicAlreadyExistsException = e;
+            }
         }
 
-        private async Task And_we_get_topic_names()
+        private void Then_a_TopicAlreadyExistsException_is_thrown()
         {
-            _topicNames = await _client.Topics.GetAllAsync();
-        }
-        private void Then_we_only_get_one_topic_with_our_name()
-        {
-            Assert.Single(_topicNames, _topicName);
+            Assert.NotNull(_topicAlreadyExistsException);
         }
 
         public void Dispose()
