@@ -27,12 +27,26 @@ export class CcloudTopics implements Topics {
     async createTopic(topic: Topic): Promise<void> {
 
         return await new Promise(async (resolve, reject) => {
-            let topicNames = await this.getTopics();
 
-            let topicFound = topicNames.find(topicName => topicName.valueOf() === topic.Name.valueOf());
-            if (topicFound !== undefined) {
-                reject(new TopicAlreadyExistsException());
+            let existingTopic = await this.describeTopic(topic.Name);
+            if (existingTopic !== undefined) {
+                
+                if(existingTopic.PartitionCount !== topic.PartitionCount){
+                    return reject(new TopicAlreadyExistsException());
+                }
+
+                Object
+                    .keys(
+                        topic.Configurations)
+                    .forEach(function (key) {
+                        if (existingTopic.Configurations[key] != topic.Configurations[key]) {
+                            return reject(new TopicAlreadyExistsException());
+                        }
+                    });
+
+                return resolve();
             }
+
 
             if (topic.Configurations === undefined || topic.Configurations === null) {
                 await executeCli([
