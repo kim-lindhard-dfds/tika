@@ -40,9 +40,14 @@ export class NotConnectedTopics implements Topics {
         
             const existingTopic = this.topics.find(t => t.Name === topic.Name);
             if (existingTopic !== undefined) {
+                
+                if(existingTopic.PartitionCount !== topic.PartitionCount){
+                    return reject(new TopicAlreadyExistsException());
+                }
 
                 Object
-                    .keys(topic.Configurations)
+                    .keys(
+                        topic.Configurations)
                     .forEach(function (key) {
                         if (existingTopic.Configurations[key] != topic.Configurations[key]) {
                             return reject(new TopicAlreadyExistsException());
