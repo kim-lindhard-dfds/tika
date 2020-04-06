@@ -11,7 +11,7 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
     public class DeleteAServiceAccountScenario
     {
         private IRestClient _client;
-        private ServiceAccountCreate _serviceAccountCreate;
+        private ServiceAccountCreateCommand _serviceAccountCreateCommand;
         private ServiceAccount _serviceAccount;
         private IEnumerable<ServiceAccount> _returnedServiceAccounts;
 
@@ -33,13 +33,8 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
         private async Task And_a_single_serviceAccount()
         {
             using var client = LocalhostRestClient.Create();
-            _serviceAccountCreate = new ServiceAccountCreate()
-            {
-                name = Guid.NewGuid().ToString(), 
-                description = "GetAllScenario"
-            };
-            
-            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreate);
+            _serviceAccountCreateCommand = ServiceAccountCreateCommandFactory.CreateForIntegrationTest();
+            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreateCommand);
         }
         
         private async Task When_Delete_is_called()

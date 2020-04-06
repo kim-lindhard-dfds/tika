@@ -29,9 +29,9 @@ namespace Tika.RestClient.Features.ServiceAccounts
             return serviceAccounts;
         }
 
-        public async Task<ServiceAccount> CreateAsync(ServiceAccountCreate serviceAccountCreate)
+        public async Task<ServiceAccount> CreateAsync(ServiceAccountCreateCommand serviceAccountCreateCommand)
         {
-            var payload = JsonConvert.SerializeObject(serviceAccountCreate);
+            var payload = JsonConvert.SerializeObject(serviceAccountCreateCommand);
 
             var content = new StringContent(
                 payload,

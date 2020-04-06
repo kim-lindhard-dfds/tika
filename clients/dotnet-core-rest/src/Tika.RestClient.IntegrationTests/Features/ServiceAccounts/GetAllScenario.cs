@@ -11,7 +11,7 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
     public class GetAllScenario
     {
         private IRestClient _client;
-        private ServiceAccountCreate _serviceAccountCreate;
+        private ServiceAccountCreateCommand _serviceAccountCreateCommand;
         private IEnumerable<ServiceAccount> _returnedServiceAccounts;
 
         [Fact]
@@ -31,13 +31,9 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
         private async Task And_a_single_service_account()
         {
             using var client = LocalhostRestClient.Create();
-            _serviceAccountCreate = new ServiceAccountCreate()
-            {
-                name = Guid.NewGuid().ToString(), 
-                description = "GetAllScenario"
-            };
+            _serviceAccountCreateCommand = ServiceAccountCreateCommandFactory.CreateForIntegrationTest();
             
-            await client.ServiceAccounts.CreateAsync(_serviceAccountCreate);
+            await client.ServiceAccounts.CreateAsync(_serviceAccountCreateCommand);
         }
         
         private async Task When_GetAll_is_called()
@@ -47,8 +43,8 @@ namespace Tika.RestClient.IntegrationTests.Features.ServiceAccounts
         
         private void Then_the_serviceAccount_is_returned()
         {
-            var serviceAccount = _returnedServiceAccounts.Single(t => t.Name == _serviceAccountCreate.name);
-            Assert.Equal(_serviceAccountCreate.description, serviceAccount.Description);
+            var serviceAccount = _returnedServiceAccounts.Single(t => t.Name == _serviceAccountCreateCommand.name);
+            Assert.Equal(_serviceAccountCreateCommand.description, serviceAccount.Description);
         }
     }
 }

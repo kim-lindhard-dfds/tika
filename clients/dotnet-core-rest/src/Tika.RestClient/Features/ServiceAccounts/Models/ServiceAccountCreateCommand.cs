@@ -2,7 +2,7 @@ using Tika.RestClient.Features.ServiceAccounts.Exceptions;
 
 namespace Tika.RestClient.Features.ServiceAccounts.Models
 {
-    public class ServiceAccountCreate
+    public class ServiceAccountCreateCommand
     {
         internal const int MAX_NAME_LENGTH = 32;
 
