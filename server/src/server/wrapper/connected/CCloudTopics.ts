@@ -28,10 +28,49 @@ export class CcloudTopics implements Topics {
 
         return await new Promise(async (resolve, reject) => {
 
-            let existingTopic = await this.describeTopic(topic.Name);
-            if (existingTopic !== undefined) {
-                
-                if(existingTopic.PartitionCount !== topic.PartitionCount){
+            try {
+                if (topic.Configurations === undefined || topic.Configurations === null) {
+                    await executeCli([
+                        "kafka", "topic",
+                        "create", topic.Name,
+                        "--partitions", topic.PartitionCount + "",
+                        "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
+                    ]);
+
+                    return resolve();
+                }
+
+                var keyEqualValueStrings: string[] = [];
+
+                Object
+                    .keys(topic.Configurations)
+                    .forEach(function (key: string) {
+                        keyEqualValueStrings.push(key + "=" + topic.Configurations[key])
+                    });
+                var configsString: string = keyEqualValueStrings.join(",");
+
+                await executeCli([
+                    "kafka", "topic",
+                    "create", topic.Name,
+                    "--partitions", topic.PartitionCount + "",
+                    "--config", configsString,
+                    "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
+                ]);
+
+                return resolve();
+
+            }
+            catch (error) {
+                if (
+                    error.name.valueOf() !== "CliException" ||
+                    error.consoleLines.some((l: string): boolean => l.includes("already exists")) === false
+                ) {
+                    throw (error);
+                }
+
+                let existingTopic = await this.describeTopic(topic.Name);
+
+                if (existingTopic.PartitionCount !== topic.PartitionCount) {
                     return reject(new TopicAlreadyExistsException());
                 }
 
@@ -46,38 +85,6 @@ export class CcloudTopics implements Topics {
 
                 return resolve();
             }
-
-
-            if (topic.Configurations === undefined || topic.Configurations === null) {
-                await executeCli([
-                    "kafka", "topic",
-                    "create", topic.Name,
-                    "--partitions", topic.PartitionCount + "",
-                    "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
-                ]);
-
-                resolve();
-            }
-
-
-            var keyEqualValueStrings: string[] = [];
-
-            Object
-                .keys(topic.Configurations)
-                .forEach(function (key: string) {
-                    keyEqualValueStrings.push(key + "=" + topic.Configurations[key])
-                });
-            var configsString: string = keyEqualValueStrings.join(",");
-
-            await executeCli([
-                "kafka", "topic",
-                "create", topic.Name,
-                "--partitions", topic.PartitionCount + "",
-                "--config", configsString,
-                "--cluster", process.env.TIKA_CCLOUD_CLUSTER_ID
-            ]);
-
-            resolve();
         });
     }
 
