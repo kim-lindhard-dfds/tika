@@ -13,7 +13,7 @@ namespace Tika.RestClient.IntegrationTests.Features.ApiKeys
     {
         private IRestClient _client;
         private ApiKeyCreate _apiKeyCreate;
-        private ServiceAccountCreate _serviceAccountCreate;
+        private ServiceAccountCreateCommand _serviceAccountCreateCommand;
         private ServiceAccount _serviceAccount;
         private ApiKey _apiKey;
         private IEnumerable<ApiKey> _returnedApiKeys;
@@ -36,13 +36,9 @@ namespace Tika.RestClient.IntegrationTests.Features.ApiKeys
         {
             using var client = LocalhostRestClient.Create();
             
-            _serviceAccountCreate = new ServiceAccountCreate()
-            {
-                name = Guid.NewGuid().ToString(), 
-                description = "GetAllScenario"
-            };
+            _serviceAccountCreateCommand = ServiceAccountCreateCommandFactory.CreateForIntegrationTest();
             
-            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreate);
+            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreateCommand);
 
             _apiKeyCreate = new ApiKeyCreate()
             {

@@ -14,6 +14,14 @@ export class TopicAlreadyExistsException extends Error {
   }
 }
 
+export class NoTopicFoundException extends Error  {
+  constructor(topicName: string) {
+    super(null);
+    this.name = "NoTopicFoundException";
+    this.message = "A Topic with the name: '"+ topicName + "' could not be found";
+  }
+}
+
 export class ServiceAccountAlreadyExistsException extends Error {
   constructor(args: any = null) {
     super(args);

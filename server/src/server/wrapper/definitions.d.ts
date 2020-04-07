@@ -1,3 +1,9 @@
+type Topic = {
+    Name: string;
+    PartitionCount: number;
+    Configurations: {[key: string]: any}
+}
+
 type ServiceAccount = {
     Id: number;
     Name: string;
@@ -75,7 +81,8 @@ interface AccessControlLists {
 
 interface Topics {
     getTopics(): Promise<string[]>
-    createTopic(name: string, partitionCount: number): Promise<void>
+    describeTopic(name: string): Promise<Topic>
+    createTopic(topic: Topic): Promise<void>
     deleteTopic(name: string): Promise<void>
     
 }

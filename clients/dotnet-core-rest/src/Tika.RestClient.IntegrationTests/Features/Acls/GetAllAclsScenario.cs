@@ -12,7 +12,7 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
     public class GetAllAclsScenario
     {
         private IRestClient _client;
-        private ServiceAccountCreate _serviceAccountCreate;
+        private ServiceAccountCreateCommand _serviceAccountCreateCommand;
         private ServiceAccount _serviceAccount;
         private AclCreateDelete _aclCreateDelete;
         private IEnumerable<Acl> _returnedAcls;
@@ -34,13 +34,9 @@ namespace Tika.RestClient.IntegrationTests.Features.Acls
         private async Task And_a_single_acl()
         {
             using var client = LocalhostRestClient.Create();
-            _serviceAccountCreate = new ServiceAccountCreate()
-            {
-                name = Guid.NewGuid().ToString(), 
-                description = "GetAllScenario"
-            };
+            _serviceAccountCreateCommand = ServiceAccountCreateCommandFactory.CreateForIntegrationTest();
             
-            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreate);
+            _serviceAccount = await client.ServiceAccounts.CreateAsync(_serviceAccountCreateCommand);
             
             _aclCreateDelete = new AclCreateDelete
             {

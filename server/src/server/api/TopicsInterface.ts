@@ -1,31 +1,34 @@
 import { Request, Response, Application } from 'express'
-import {TopicAlreadyExistsException} from "../wrapper/model/error";
-import { transcode } from 'buffer';
+import { TopicAlreadyExistsException } from "../wrapper/model/error";
 
 export class TopicsInterface {
 
-    public configureApp(topic: Topics, app: Application) {
+    public configureApp(topics: Topics, app: Application) {
 
         app.get('/topics', async function (req: Request, res: Response) {
 
-            res.json(await topic.getTopics());
+            res.json(await topics.getTopics());
+        });
+
+        app.get('/topics/:name', async function (req: Request, res: Response) {
+            var topic = await topics.describeTopic(req.params.name);
+            res.json(topic);
         });
 
         app.post('/topics', async function (req: Request, res: Response) {
+
+            const topic = req.body as Topic;
             let good : boolean = true;
 
             try {
-                await topic.createTopic(
-                    req.body.name,
-                    parseInt(req.body.partitionCount),
-                );
+                await topics.createTopic(topic);
             }
             catch (err) {
                 console.error(err);
                 if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
-                    res.status(409).json({errName: err.name, errMessage: err.message});
+                    res.status(409).json({ errName: err.name, errMessage: err.message });
                 } else {
-                    res.status(500).json({errName: err.name, errMessage: err.message});
+                    res.status(500).json({ errName: err.name, errMessage: err.message });
                 }
 
                 good = false;
@@ -39,7 +42,7 @@ export class TopicsInterface {
 
         app.delete('/topics/:name', async function (req: Request, res: Response) {
 
-            await topic.deleteTopic(
+            await topics.deleteTopic(
                 req.params.name,
             );
 
