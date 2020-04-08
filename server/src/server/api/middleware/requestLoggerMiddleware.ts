@@ -9,7 +9,7 @@ export const RequestLogger = (
   // 4/2/2020, 10:39:06 AM: [1347a8a782381] Request GET - /
 
   let requestLogObject : any = {
-    timestamp: new Date().toUTCString(),
+    timestamp: new Date().toISOString(),
     correlationId: (request as any).id,
     action: "request",
     method: request.method,
