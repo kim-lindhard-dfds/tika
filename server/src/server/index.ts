@@ -5,11 +5,16 @@ import {TopicsInterface} from "./api/TopicsInterface";
 import {NotConnectedCCloudCliWrapper} from "./wrapper/notConnected/NotConnectedCCloudCliWrapper"
 import {Ccloud} from "./wrapper/ccloud";
 import {RequestLogger} from "./api/middleware/requestLoggerMiddleware";
+import { RequestError } from "./api/middleware/requestErrorMiddleware";
+import { ResponseLogger } from "./api/middleware/responseLoggerMiddleware";
 const express = require("express");
+const setCorrelationId = require('express-mw-correlation-id');
 
 const app = express();
+app.use(setCorrelationId());
 app.use(express.json());
 app.use(RequestLogger);
+app.use(ResponseLogger);
 
 var cc: CCloudCliWrapper;
 
@@ -54,6 +59,8 @@ topicsInterface.configureApp(
     cc.Kafka.Topics,
     app
 );
+
+app.use(RequestError);
 
 
 const port = process.env.port || 3000;

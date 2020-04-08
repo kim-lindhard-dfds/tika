@@ -1,36 +1,40 @@
-import { Request, Response, Application } from 'express'
-import { TopicAlreadyExistsException } from "../wrapper/model/error";
+import { Request, Response, Application, NextFunction } from 'express'
 
 export class TopicsInterface {
 
     public configureApp(topics: Topics, app: Application) {
 
-        app.get('/topics', async function (req: Request, res: Response) {
+        app.get('/topics', async function (req: Request, res: Response, next: NextFunction) {
 
-            res.json(await topics.getTopics());
+            try {
+                res.json(await topics.getTopics());
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.get('/topics/:name', async function (req: Request, res: Response) {
-            var topic = await topics.describeTopic(req.params.name);
-            res.json(topic);
+        app.get('/topics/:name', async function (req: Request, res: Response, next: NextFunction) {
+
+            try {
+                var topic = await topics.describeTopic(req.params.name);
+                res.json(topic);
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.post('/topics', async function (req: Request, res: Response) {
+        app.post('/topics', async function (req: Request, res: Response, next: NextFunction) {
 
             const topic = req.body as Topic;
-            let good : boolean = true;
+            let good: boolean = true;
 
             try {
                 await topics.createTopic(topic);
             }
             catch (err) {
-                console.error(err);
-                if (err.name.valueOf() === new TopicAlreadyExistsException().name.valueOf()) {
-                    res.status(409).json({ errName: err.name, errMessage: err.message });
-                } else {
-                    res.status(500).json({ errName: err.name, errMessage: err.message });
-                }
-
+                next(err);
                 good = false;
             }
 
@@ -40,13 +44,18 @@ export class TopicsInterface {
             }
         });
 
-        app.delete('/topics/:name', async function (req: Request, res: Response) {
+        app.delete('/topics/:name', async function (req: Request, res: Response, next: NextFunction) {
 
-            await topics.deleteTopic(
-                req.params.name,
-            );
+            try {
+                await topics.deleteTopic(
+                    req.params.name,
+                );
 
-            res.sendStatus(200);
+                res.sendStatus(200);
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
 }
