@@ -14,6 +14,7 @@ const app = express();
 app.use(setCorrelationId());
 app.use(express.json());
 app.use(RequestLogger);
+app.use(ResponseLogger);
 
 var cc: CCloudCliWrapper;
 
@@ -60,7 +61,6 @@ topicsInterface.configureApp(
 );
 
 app.use(RequestError);
-app.use(ResponseLogger);
 
 
 const port = process.env.port || 3000;
