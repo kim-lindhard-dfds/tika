@@ -14,11 +14,6 @@ export class TopicsInterface {
             }
         });
 
-        app.post('/topics', async function (req: Request, res: Response, next: NextFunction) {
-
-            res.json(await topics.getTopics());
-        });
-
         app.get('/topics/:name', async function (req: Request, res: Response, next: NextFunction) {
 
             try {
