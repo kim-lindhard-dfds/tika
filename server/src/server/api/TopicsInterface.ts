@@ -1,29 +1,42 @@
 import { Request, Response, Application, NextFunction } from 'express'
-import {TopicAlreadyExistsException} from "../wrapper/model/error";
-import { transcode } from 'buffer';
 
 export class TopicsInterface {
 
-    public configureApp(topic: Topics, app: Application) {
+    public configureApp(topics: Topics, app: Application) {
 
-        app.get('/topics', async function (req: Request, res: Response, next : NextFunction) {
+        app.get('/topics', async function (req: Request, res: Response, next: NextFunction) {
 
             try {
-                res.json(await topic.getTopics());
+                res.json(await topics.getTopics());
             }
             catch (err) {
                 next(err);
             }
         });
 
-        app.post('/topics', async function (req: Request, res: Response, next : NextFunction) {
-            let good : boolean = true;
+        app.post('/topics', async function (req: Request, res: Response, next: NextFunction) {
+
+            res.json(await topics.getTopics());
+        });
+
+        app.get('/topics/:name', async function (req: Request, res: Response, next: NextFunction) {
 
             try {
-                await topic.createTopic(
-                    req.body.name,
-                    parseInt(req.body.partitionCount),
-                );
+                var topic = await topics.describeTopic(req.params.name);
+                res.json(topic);
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+
+        app.post('/topics', async function (req: Request, res: Response, next: NextFunction) {
+
+            const topic = req.body as Topic;
+            let good: boolean = true;
+
+            try {
+                await topics.createTopic(topic);
             }
             catch (err) {
                 next(err);
@@ -36,13 +49,13 @@ export class TopicsInterface {
             }
         });
 
-        app.delete('/topics/:name', async function (req: Request, res: Response, next : NextFunction) {
-            
+        app.delete('/topics/:name', async function (req: Request, res: Response, next: NextFunction) {
+
             try {
-                await topic.deleteTopic(
+                await topics.deleteTopic(
                     req.params.name,
                 );
-    
+
                 res.sendStatus(200);
             }
             catch (err) {

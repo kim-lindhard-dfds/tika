@@ -35,7 +35,11 @@ export class CcloudServiceAccount implements ServiceAccounts {
 
         throw new ServiceAccountAlreadyExistsException();
       }
+
+      throw (error);
     }
+
+
 
     let result = parseSideColumns(cliResult);
 
