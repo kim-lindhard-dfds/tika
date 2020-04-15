@@ -1,27 +1,43 @@
-import { Request, Response, Application } from 'express'
+import { Request, Response, Application, NextFunction } from 'express'
 
 export class ApiKeysInterface {
     public configureApp(apiKeys: ApiKeys, app: Application) {
     
-        app.post('/api-keys', async function (req: Request, res: Response) {
+        app.post('/api-keys', async function (req: Request, res: Response, next : NextFunction) {
 
-            let apiKey = await apiKeys.createApiKey(
-                parseInt(req.body.serviceAccountId),
-                req.body.description
-            );
-            res.json(apiKey);
+            try {
+                let apiKey = await apiKeys.createApiKey(
+                    parseInt(req.body.serviceAccountId),
+                    req.body.description
+                );
+                res.json(apiKey);
+    
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.get('/api-keys', async function (req: Request, res: Response) {
+        app.get('/api-keys', async function (req: Request, res: Response, next : NextFunction) {
 
-            res.json(await apiKeys.getApiKeys());
+            try {
+                res.json(await apiKeys.getApiKeys());
+            }
+            catch (err) {
+                next(err);
+            }
         });
 
-        app.delete('/api-keys/:id', async function (req: Request, res: Response) {
+        app.delete('/api-keys/:id', async function (req: Request, res: Response, next : NextFunction) {
 
-            await apiKeys.deleteApiKey(req.params.id);
+            try {
+                await apiKeys.deleteApiKey(req.params.id);
 
-            res.sendStatus(200);
+                res.sendStatus(200);    
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
 }

@@ -66,6 +66,17 @@ namespace Tika.RestClient.Features.Topics
 
             httpResponseMessage.EnsureSuccessStatusCode();
         }
+
+        public async Task<TopicDescription> DescribeAsync(string topicName)
+        {
+            var httpResponseMessage = await _httpClient.GetAsync(
+                new Uri(TOPICS_ROUTE + "/" + topicName, UriKind.Relative)
+            );
+            
+            var topicDescription = await Utilities.Parse<TopicDescription>(httpResponseMessage);
+
+            return topicDescription;
+        }
     }
 
     internal class TikaGenericError

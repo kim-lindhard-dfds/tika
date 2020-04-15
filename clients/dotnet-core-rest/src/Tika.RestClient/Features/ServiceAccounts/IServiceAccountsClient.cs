@@ -7,7 +7,7 @@ namespace Tika.RestClient.Features.ServiceAccounts
     public interface IServiceAccountsClient
     {
         Task<IEnumerable<ServiceAccount>> GetAllAsync();
-        Task<ServiceAccount> CreateAsync(ServiceAccountCreate serviceAccountCreate);
+        Task<ServiceAccount> CreateAsync(ServiceAccountCreateCommand serviceAccountCreateCommand);
         Task DeleteAsync(string id);
     }
 }

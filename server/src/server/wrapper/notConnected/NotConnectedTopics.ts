@@ -1,4 +1,4 @@
-import {TopicAlreadyExistsException} from "../model/error";
+import { TopicAlreadyExistsException, NoTopicFoundException } from "../model/error";
 
 export class NotConnectedTopics implements Topics {
 
@@ -12,26 +12,57 @@ export class NotConnectedTopics implements Topics {
         return NotConnectedTopics.instance;
     }
 
-    topics: string[];
+    topics: Topic[];
 
     constructor() {
         this.topics = [];
     }
 
+
     async getTopics(): Promise<string[]> {
-        return this.topics;
+        return this.topics.map(t => t.Name);
     }
 
-    async createTopic(name: string, partitionCount: number): Promise<void> {
-        let theTopicExists = this.topics.indexOf(name) !== -1;
-        if (theTopicExists) {
-            throw new TopicAlreadyExistsException();
-        }
+    describeTopic(name: string): Promise<Topic> {
+        return new Promise((resolve, reject) => {
 
-        this.topics.push(name);
+            let topicFound = this.topics.find(t => t.Name === name);
+            if (topicFound !== undefined) {
+                return resolve(topicFound);
+            }
+
+            return reject(new NoTopicFoundException(name));
+        });
+    }
+
+    async createTopic(topic: Topic): Promise<void> {
+        return new Promise((resolve, reject) => {
+        
+            const existingTopic = this.topics.find(t => t.Name === topic.Name);
+            if (existingTopic !== undefined) {
+                
+                if(existingTopic.PartitionCount !== topic.PartitionCount){
+                    return reject(new TopicAlreadyExistsException());
+                }
+
+                Object
+                    .keys(
+                        topic.Configurations)
+                    .forEach(function (key) {
+                        if (existingTopic.Configurations[key] != topic.Configurations[key]) {
+                            return reject(new TopicAlreadyExistsException());
+                        }
+                    });
+
+                return resolve();
+            }
+
+            this.topics.push(topic);
+            return resolve();
+        });
     }
 
     async deleteTopic(name: string): Promise<void> {
-        this.topics = this.topics.filter(t => t !== name);
+        this.topics = this.topics.filter(t => t.Name !== name);
     }
 }

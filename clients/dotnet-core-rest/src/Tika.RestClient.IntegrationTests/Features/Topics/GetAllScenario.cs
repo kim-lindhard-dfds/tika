@@ -8,10 +8,10 @@ using Xunit;
 
 namespace Tika.RestClient.IntegrationTests.Features.Topics
 {
-    public class GetAllScenario
+    public class GetAllScenario : IDisposable
     {
         private IRestClient _client;
-        private TopicCreate _topicCreate;
+        private TopicCreate _topicCreateCommand;
         private IEnumerable<string> _returnedTopics;
 
         [Fact]
@@ -32,13 +32,12 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
         private async Task And_a_single_topic()
         {
             using var client = LocalhostRestClient.Create();
-            _topicCreate = new TopicCreate
-            {
-                name = Guid.NewGuid().ToString(), 
-                partitionCount = 1
-            };
+            _topicCreateCommand = TopicCreate.Create(
+                name: Guid.NewGuid().ToString(),
+                partitionCount: 1
+            );
             
-            await client.Topics.CreateAsync(_topicCreate);
+            await client.Topics.CreateAsync(_topicCreateCommand);
         }
 
         private async Task When_GetAll_is_called()
@@ -48,7 +47,13 @@ namespace Tika.RestClient.IntegrationTests.Features.Topics
 
         private void Then_the_topic_is_returned()
         {
-            _returnedTopics.Single(t => t == _topicCreate.name);
+            _returnedTopics.Single(t => t == _topicCreateCommand.Name);
+        }
+
+        public void Dispose()
+        {
+            var task = _client.Topics.DeleteAsync(_topicCreateCommand.Name);
+            task.Wait();
         }
     }
 }
