@@ -21,7 +21,7 @@ export class CcloudAccessControlLists implements AccessControlLists {
         topicPrefix: string,
         consumerGroupPrefix: string
     ): Promise<void> {
-
+        
         let command = this.createCommand(
             "create",
             serviceAccountId,
@@ -71,13 +71,17 @@ export class CcloudAccessControlLists implements AccessControlLists {
 
         command.push(allow ? "--allow" : "--deny");
 
-        if (0 < topicPrefix.length) {
-            command.push("--topic");
-            command.push(topicPrefix);
-            command.push("--prefix");
-        } else if (0 < consumerGroupPrefix.length) {
+        if (consumerGroupPrefix !== undefined && 0 < consumerGroupPrefix.length) {
             command.push("--consumer-group");
             command.push(consumerGroupPrefix);
+            command.push("--prefix");
+        }
+        else if (topicPrefix !== undefined && 0 < topicPrefix.length) {
+            if(topicPrefix ==="*" && createOrDelete === "delete")
+            { topicPrefix = ""}
+
+            command.push("--topic");
+            command.push(topicPrefix);
             command.push("--prefix");
         } else {
             command.push("--cluster-scope");
