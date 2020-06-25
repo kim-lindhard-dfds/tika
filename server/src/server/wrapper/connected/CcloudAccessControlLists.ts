@@ -78,7 +78,7 @@ export class CcloudAccessControlLists implements AccessControlLists {
         }
         else if (topicPrefix !== undefined && 0 < topicPrefix.length) {
             if(topicPrefix ==="*" && createOrDelete === "delete")
-            { topicPrefix = ""}
+            { topicPrefix = "''"}
 
             command.push("--topic");
             command.push(topicPrefix);
