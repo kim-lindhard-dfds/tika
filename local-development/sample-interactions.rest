@@ -78,35 +78,3 @@ content-type: application/json
 # Remove service account
 DELETE  http://localhost:3000/api-keys/RWK552CQXLNDQ25K
 content-type: application/json
-
-###
-
-# List all Access control lists
-
-GET http://localhost:3000/access-control-lists
-
-###
-
-# Add Access control list
-POST http://localhost:3000/access-control-lists
-content-type: application/json
-
-{
-    "serviceAccountId": 993311,
-    "allow": false,
-    "operation": "CREATE",
-    "topicPrefix": "testing.delete.at.any.time."
-}
-
-###
-
-# Add Remove control list
-DELETE  http://localhost:3000/access-control-lists
-content-type: application/json
-
-{
-    "serviceAccountId": 993311,
-    "allow": false,
-    "operation": "CREATE",
-    "topicPrefix": "testing.delete.at.any.time."
-}
