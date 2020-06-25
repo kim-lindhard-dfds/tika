@@ -1,0 +1,42 @@
+# List all Access control lists
+
+GET http://localhost:3000/access-control-lists
+
+###
+
+# Add Access control list
+POST http://localhost:3000/access-control-lists
+content-type: application/json
+
+{
+    "serviceAccountId": 993311,
+    "allow": false,
+    "operation": "CREATE",
+    "topicPrefix": "testing.delete.at.any.time."
+}
+
+###
+
+# Add access control list
+POST  http://localhost:3000/access-control-lists/
+content-type: application/json
+
+{
+    "serviceAccountId": 64283,
+    "allow": false,
+    "operation": "CREATE",
+    "topicPrefix": "*"
+}
+
+###
+
+# Remove access control list
+POST  http://localhost:3000/access-control-lists/delete
+content-type: application/json
+
+{
+    "serviceAccountId": 64283,
+    "allow": false,
+    "operation": "CREATE",
+    "topicPrefix": "*"
+}
